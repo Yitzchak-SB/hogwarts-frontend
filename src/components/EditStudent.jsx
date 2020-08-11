@@ -66,17 +66,22 @@ class EditStudent extends React.Component {
       activeSkills,
       desiredSkills,
     } = this.state;
-    const student = {
-      id: this.state.user._id,
-      password: this.state.user._password,
+    const student_data = {
+      data: {
+        id: this.state.user._id,
+        password: this.state.user._password,
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
+        existing_magic_skills: activeSkills,
+        desired_magic_skills: desiredSkills,
+      },
       initial_email: this.state.user._email,
-      first_name: firstName,
-      last_name: lastName,
-      email: email,
-      existing_magic_skills: activeSkills,
-      desired_magic_skills: desiredSkills,
     };
-    Axios.post("http://127.0.0.1:5000/student/edit", student);
+    Axios.post("http://127.0.0.1:5000/student/edit", student_data).then(() => {
+      this.props.history.push("/admin-dashboard");
+      this.context.updateStudents();
+    });
   }
 
   handleExit() {

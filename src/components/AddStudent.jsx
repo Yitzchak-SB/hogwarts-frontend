@@ -72,8 +72,10 @@ class AddStudent extends React.Component {
           admin: this.context.user,
           student: student,
         },
+      }).then(() => {
+        this.props.history.push("/admin-dashboard");
+        this.context.updateStudents();
       });
-      this.props.history.push("/admin-dashboard");
     }
   }
 

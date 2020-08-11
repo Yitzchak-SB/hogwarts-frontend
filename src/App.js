@@ -14,8 +14,9 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.setUser = this.setUser.bind(this);
-    this.addStudent = this.addStudent.bind(this);
+    this.updateStudents = this.updateStudents.bind(this);
     this.deleteStudent = this.deleteStudent.bind(this);
+    this.interval = false;
     this.state = { user: null, students: [] };
   }
 
@@ -31,19 +32,26 @@ class App extends React.Component {
 
   componentDidMount() {
     this.getAllStudents();
+    this.interval = setInterval(() => this.getAllStudents(), 15000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   deleteStudent(event, student) {
+    const request = { admin: this.state.user, student: student };
     const newStudents = this.state.students.filter(
       (user) => student.email !== user.email
     );
     this.setState({ students: newStudents });
+    Axios.post("http://127.0.0.1:5000/student-del", request).then((res) =>
+      this.getAllStudents()
+    );
   }
 
-  addStudent(student) {
-    this.setState((state) => {
-      return { students: [...state.students, student] };
-    });
+  updateStudents() {
+    this.getAllStudents();
   }
 
   setUser(userData) {
@@ -59,6 +67,7 @@ class App extends React.Component {
             setUser: this.setUser,
             students: this.state.students,
             deleteStudent: this.deleteStudent,
+            updateStudents: this.updateStudents,
           }}
         >
           <div className="app">
@@ -72,23 +81,15 @@ class App extends React.Component {
             <Route exact path="/admin-dashboard">
               <AdminDashboard students={this.state.students} />
             </Route>
-          </Switch>
-          <Switch>
             <Route path="/add-student">
               <AddStudent addStudent={this.addStudent} />
             </Route>
-          </Switch>
-          <Switch>
             <Route path="/edit-student/:email">
               <EditStudent />
             </Route>
-          </Switch>
-          <Switch>
             <Route path="/login">
               <Login />
             </Route>
-          </Switch>
-          <Switch>
             <Route path="/signup">
               <SignUp />
             </Route>

@@ -10,6 +10,7 @@ import {
   Button,
 } from "@material-ui/core";
 import UserContext from "../context/UserContext";
+import DeleteModal from "./DeleteModal";
 
 function StudentsTable(props) {
   const history = useHistory();
@@ -88,13 +89,7 @@ function StudentsTable(props) {
                 })}
 
                 <TableCell key={Date.now() * Math.random()}>
-                  <Button
-                    onClick={(event) => {
-                      context.deleteStudent(event, student);
-                    }}
-                  >
-                    Delete Student
-                  </Button>
+                  <DeleteModal student={student} />
                   <Link to={`/edit-student/${student.email}`}>
                     <Button>Edit Student</Button>
                   </Link>
