@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -31,8 +31,8 @@ class EditStudent extends React.Component {
       email: "",
       addExist: false,
       addDesire: false,
-      activeSkills: [],
-      desiredSkills: [],
+      activeSkills: false,
+      desiredSkills: false,
       skill: false,
       level: false,
     };
@@ -69,7 +69,6 @@ class EditStudent extends React.Component {
     const student_data = {
       data: {
         id: this.state.user._id,
-        password: this.state.user._password,
         first_name: firstName,
         last_name: lastName,
         email: email,
@@ -78,6 +77,7 @@ class EditStudent extends React.Component {
       },
       initial_email: this.state.user._email,
     };
+    console.log(student_data);
     Axios.post("http://127.0.0.1:5000/student/edit", student_data).then(() => {
       this.props.history.push("/admin-dashboard");
       this.context.updateStudents();
@@ -111,9 +111,8 @@ class EditStudent extends React.Component {
 
   submitExistSkill(event) {
     event.preventDefault();
-    const skill = {
-      [this.state.skill]: { name: this.state.skill, level: this.state.level },
-    };
+    const skill = { name: this.state.skill, level: this.state.level };
+    console.log(skill);
     this.setState((state) => {
       return {
         addExist: false,
@@ -127,9 +126,8 @@ class EditStudent extends React.Component {
 
   submitDesireSkill(event) {
     event.preventDefault();
-    const skill = {
-      [this.state.skill]: { name: this.state.skill, level: this.state.level },
-    };
+    const skill = { name: this.state.skill, level: this.state.level };
+    console.log(skill);
     this.setState((state) => {
       return {
         addExist: false,
@@ -142,6 +140,7 @@ class EditStudent extends React.Component {
   }
 
   render() {
+    console.log([this.state.desiredSkills, this.state.activeSkills]);
     const valid =
       this.state.firstName === "" ||
       this.state.lastName === "" ||
@@ -244,7 +243,6 @@ class EditStudent extends React.Component {
             )}
           </>
         )}
-        <Link to="/admin-dashboard">Back To Dashboard</Link>
       </>
     );
   }

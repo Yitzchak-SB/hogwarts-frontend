@@ -8,7 +8,7 @@ import {
   FormControlLabel,
   Checkbox,
 } from "@material-ui/core";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import AddSkill from "./AddSkill";
 import Axios from "axios";
 import UserContext from "../context/UserContext";
@@ -273,7 +273,6 @@ class AddStudent extends React.Component {
             handleExit={this.handleExit}
           />
         )}
-        <Link to="/admin-dashboard">Back To Dashboard</Link>
       </>
     );
   }

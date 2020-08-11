@@ -3,12 +3,12 @@ import { PieChart } from "react-minimal-pie-chart";
 import { useState } from "react";
 import Axios from "axios";
 
-function SkillsPieChart() {
-  const [skills, setSkills] = useState(null);
+function SkillsPieChart({ skillType }) {
+  const [skills, setSkills] = useState([]);
 
   const colors = [
     "#FFE4C4",
-    "#000000",
+    "#B6322E",
     "#FFEBCD",
     "#0000FF",
     "#8A2BE2",
@@ -16,32 +16,57 @@ function SkillsPieChart() {
     "#5F9EA0",
   ];
 
-  useEffect(() => {
-    Axios.get("http://127.0.0.1:5000//skills").then((res) => {
-      setSkills(res.data["skills"]);
-    });
-  }, []);
+  const skillsList = [
+    "Potion making",
+    "Spells",
+    "Quidditch",
+    "Animagus",
+    "Apparate",
+    "Metamorphmagi",
+    "Parseltongue",
+  ];
 
+  useEffect(() => {
+    for (let i = 0; i < skillsList.length; i++) {
+      Axios.get(
+        `http://127.0.0.1:5000//${skillType}?skill=${skillsList[i]}`
+      ).then((res) => {
+        setSkills((skills) => [...skills, res.data]);
+      });
+    }
+  }, []);
+  let total = 0;
   const values = () => {
     if (skills) {
       let result = [];
       let index = 0;
-      for (let skill in skills["desired_skills"]) {
-        result.push({
-          title: skills["desired_skills"][skill].name,
-          value: parseInt(skills["desired_skills"][skill].count) + 1,
-          color: colors[index],
-        });
-        index++;
+      for (let i = 0; i < skills.length; i++) {
+        for (let skill in skills[i]) {
+          if (skills[i][skill][0]) {
+            total += skills[i][skill][0].result;
+            result.push({
+              title: skill,
+              value: skills[i][skill][0].result,
+              color: colors[index],
+            });
+          }
+          index++;
+        }
       }
       return result;
     }
   };
 
   const pieChartValues = values();
-  console.log(pieChartValues);
-
-  return <PieChart data={pieChartValues} />;
+  return (
+    <PieChart
+      data={pieChartValues}
+      label={(data) =>
+        `${data.dataEntry.title} ${(data.dataEntry.value / total) * 100}%`
+      }
+      style={{ fontSize: "2" }}
+    />
+  );
 }
 
 export default SkillsPieChart;

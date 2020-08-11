@@ -9,6 +9,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 import UserContext from "./context/UserContext";
 import Axios from "axios";
+import { Container } from "@material-ui/core";
+import TopNav from "./components/TopNav";
 
 class App extends React.Component {
   constructor(props) {
@@ -61,40 +63,43 @@ class App extends React.Component {
   render() {
     return (
       <Router>
-        <UserContext.Provider
-          value={{
-            user: this.state.user,
-            setUser: this.setUser,
-            students: this.state.students,
-            deleteStudent: this.deleteStudent,
-            updateStudents: this.updateStudents,
-          }}
-        >
-          <div className="app">
-            <PrivateRoute
-              dashboard="/admin-dashboard"
-              login="/login"
-              user={this.state.user}
-            />
-          </div>
-          <Switch>
-            <Route exact path="/admin-dashboard">
-              <AdminDashboard students={this.state.students} />
-            </Route>
-            <Route path="/add-student">
-              <AddStudent addStudent={this.addStudent} />
-            </Route>
-            <Route path="/edit-student/:email">
-              <EditStudent />
-            </Route>
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route path="/signup">
-              <SignUp />
-            </Route>
-          </Switch>
-        </UserContext.Provider>
+        <Container>
+          <UserContext.Provider
+            value={{
+              user: this.state.user,
+              setUser: this.setUser,
+              students: this.state.students,
+              deleteStudent: this.deleteStudent,
+              updateStudents: this.updateStudents,
+            }}
+          >
+            <div className="app">
+              <TopNav />
+              <PrivateRoute
+                dashboard="/admin-dashboard"
+                login="/login"
+                user={this.state.user}
+              />
+            </div>
+            <Switch>
+              <Route exact path="/admin-dashboard">
+                <AdminDashboard students={this.state.students} />
+              </Route>
+              <Route path="/add-student">
+                <AddStudent addStudent={this.addStudent} />
+              </Route>
+              <Route path="/edit-student/:email">
+                <EditStudent />
+              </Route>
+              <Route path="/login">
+                <Login />
+              </Route>
+              <Route path="/signup">
+                <SignUp />
+              </Route>
+            </Switch>
+          </UserContext.Provider>
+        </Container>
       </Router>
     );
   }

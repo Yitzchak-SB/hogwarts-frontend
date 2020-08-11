@@ -1,16 +1,9 @@
 import React, { useContext } from "react";
 import { useHistory, Link } from "react-router-dom";
-import {
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Button,
-} from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import UserContext from "../context/UserContext";
 import DeleteModal from "./DeleteModal";
+import { Table } from "react-bootstrap";
 
 function StudentsTable(props) {
   const history = useHistory();
@@ -23,18 +16,14 @@ function StudentsTable(props) {
   const GetSkillStr = (object) => {
     let desiredSkills = "";
     let existingSkills = "";
-    if (object.activeSkills) {
-      for (let skills in object.activeSkills) {
-        for (let skill in object.activeSkills[skills]) {
-          existingSkills += `${object.activeSkills[skills][skill].name} Level ${object.activeSkills[skills][skill].level} `;
-        }
+    if (object._existing_magic_skills) {
+      for (let skill in object._existing_magic_skills) {
+        existingSkills += `${object._existing_magic_skills[skill].name} Level ${object._existing_magic_skills[skill].level} `;
       }
     }
-    if (object.desiredSkills) {
-      for (let skills in object.desiredSkills) {
-        for (let skill in object.desiredSkills[skills]) {
-          desiredSkills += `${object.desiredSkills[skills][skill].name} Level ${object.desiredSkills[skills][skill].level} \n`;
-        }
+    if (object._desired_magic_skills) {
+      for (let skill in object._desired_magic_skills) {
+        desiredSkills += `${object._desired_magic_skills[skill].name} Level ${object._desired_magic_skills[skill].level} \n`;
       }
     }
     return { desire: desiredSkills, exist: existingSkills };
@@ -58,48 +47,44 @@ function StudentsTable(props) {
   });
 
   return (
-    <TableContainer>
-      <Table stickyHeader aria-label="sticky table">
-        <TableHead>
-          <TableRow>
-            {columns.map((column) => (
-              <TableCell key={Date.now() * Math.random()}>
-                {column.label}
-              </TableCell>
-            ))}
-            <TableCell key={Date.now() * Math.random()}>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {studentsData.map((student) => {
-            return (
-              <TableRow hover role="checkbox" key={Date.now() * Math.random()}>
-                {columns.map((column) => {
-                  const value = student[column.tag];
-                  return (
-                    <TableCell
-                      onClick={(event) => {
-                        redirectOnClick(event, student);
-                      }}
-                      key={Date.now() * Math.random()}
-                    >
-                      {value}
-                    </TableCell>
-                  );
-                })}
+    <Table size="sm" responsive>
+      <thead>
+        <tr>
+          {columns.map((column) => (
+            <th key={Date.now() * Math.random()}>{column.label}</th>
+          ))}
+          <th key={Date.now() * Math.random()}>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {studentsData.map((student) => {
+          return (
+            <tr key={Date.now() * Math.random()}>
+              {columns.map((column) => {
+                const value = student[column.tag];
+                return (
+                  <td
+                    onClick={(event) => {
+                      redirectOnClick(event, student);
+                    }}
+                    key={Date.now() * Math.random()}
+                  >
+                    {value}
+                  </td>
+                );
+              })}
 
-                <TableCell key={Date.now() * Math.random()}>
-                  <DeleteModal student={student} />
-                  <Link to={`/edit-student/${student.email}`}>
-                    <Button>Edit Student</Button>
-                  </Link>
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </TableContainer>
+              <td key={Date.now() * Math.random()}>
+                <DeleteModal student={student} />
+                <Link to={`/edit-student/${student.email}`}>
+                  <Button>Edit Student</Button>
+                </Link>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </Table>
   );
 }
 
