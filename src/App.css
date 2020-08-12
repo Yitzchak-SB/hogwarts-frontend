@@ -3,3 +3,11 @@
   /*min-height: 100vh; */
   z-index: -50;
 }
+
+.link {
+  cursor: pointer;
+}
+
+.table-cell {
+  width: 50px;
+}

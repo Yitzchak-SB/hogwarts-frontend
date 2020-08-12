@@ -1,8 +1,6 @@
 import React from "react";
 import "./App.css";
 import AdminDashboard from "./components/AdminDashboard";
-import AddStudent from "./components/AddStudent";
-import EditStudent from "./components/EditStudent";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -11,6 +9,8 @@ import UserContext from "./context/UserContext";
 import Axios from "axios";
 import { Container } from "@material-ui/core";
 import TopNav from "./components/TopNav";
+import StudentPage from "./components/StudentPage";
+import StudentForm from "./components/StudentForm";
 
 class App extends React.Component {
   constructor(props) {
@@ -86,16 +86,19 @@ class App extends React.Component {
                 <AdminDashboard students={this.state.students} />
               </Route>
               <Route path="/add-student">
-                <AddStudent addStudent={this.addStudent} />
+                <StudentForm />
               </Route>
               <Route path="/edit-student/:email">
-                <EditStudent />
+                <StudentForm edit="true" />
               </Route>
               <Route path="/login">
                 <Login />
               </Route>
               <Route path="/signup">
                 <SignUp />
+              </Route>
+              <Route path="/user-page/:firstName/:lastName">
+                <StudentPage />
               </Route>
             </Switch>
           </UserContext.Provider>

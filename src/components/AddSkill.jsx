@@ -7,30 +7,36 @@ import {
   Input,
   MenuItem,
 } from "@material-ui/core";
+import { LEVELS, SKILLS } from "../data/constants";
 
 function AddSkill(props) {
-  const skills = [
-    "Potion making",
-    "Spells",
-    "Quidditch",
-    "Animagus",
-    "Apparate",
-    "Metamorphmagi",
-    "Parseltongue",
-  ];
-  const levels = ["1", "2", "3", "4", "5"];
+  const handleSubmit = (event) => {
+    if (props.exist) {
+      props.submitSkill(event, "activeSkills");
+    } else {
+      props.submitSkill(event, "desiredSkills");
+    }
+  };
+
+  function handleSkillChange(event) {
+    props.handleSkillChange(event, props.exist);
+  }
+
+  function handleLevelChange(event) {
+    props.handleLevelChange(event, props.exist);
+  }
 
   return (
     <>
       <FormControl>
         <InputLabel>Skill</InputLabel>
         <Select
-          style={{ width: 300 }}
-          value={props.skill ? props.skill : "Select Skill"}
-          onChange={props.handleSkillChange}
+          style={{ width: 300, margin: 15 }}
+          value={props.skill ? props.skill : ""}
+          onChange={handleSkillChange}
           input={<Input />}
         >
-          {skills.map((skill) => (
+          {SKILLS.map((skill) => (
             <MenuItem key={skill} value={skill}>
               {skill}
             </MenuItem>
@@ -40,26 +46,20 @@ function AddSkill(props) {
       <FormControl>
         <InputLabel>Level</InputLabel>
         <Select
-          style={{ width: 300 }}
-          value={props.level ? props.level : "Select Level"}
-          onChange={props.handleLevelChange}
+          style={{ width: 300, margin: 15 }}
+          value={props.level ? props.level : ""}
+          onChange={handleLevelChange}
           input={<Input />}
         >
-          {levels.map((level) => (
+          {LEVELS.map((level) => (
             <MenuItem key={level} value={level}>
               {level}
             </MenuItem>
           ))}
         </Select>
       </FormControl>
-      <Button
-        type="click"
-        onClick={props.exist ? props.submitExistSkill : props.submitDesireSkill}
-      >
+      <Button type="click" onClick={handleSubmit}>
         Add
-      </Button>
-      <Button type="click" onClick={props.handleExit}>
-        Exit
       </Button>
     </>
   );

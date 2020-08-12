@@ -2,39 +2,20 @@ import React, { useEffect } from "react";
 import { PieChart } from "react-minimal-pie-chart";
 import { useState } from "react";
 import Axios from "axios";
+import { SKILLS, COLORS } from "../data/constants";
 
 function SkillsPieChart({ skillType }) {
   const [skills, setSkills] = useState([]);
 
-  const colors = [
-    "#FFE4C4",
-    "#B6322E",
-    "#FFEBCD",
-    "#0000FF",
-    "#8A2BE2",
-    "#A52A2A",
-    "#5F9EA0",
-  ];
-
-  const skillsList = [
-    "Potion making",
-    "Spells",
-    "Quidditch",
-    "Animagus",
-    "Apparate",
-    "Metamorphmagi",
-    "Parseltongue",
-  ];
-
   useEffect(() => {
-    for (let i = 0; i < skillsList.length; i++) {
-      Axios.get(
-        `http://127.0.0.1:5000//${skillType}?skill=${skillsList[i]}`
-      ).then((res) => {
-        setSkills((skills) => [...skills, res.data]);
-      });
+    for (let i = 0; i < SKILLS.length; i++) {
+      Axios.get(`http://127.0.0.1:5000//${skillType}?skill=${SKILLS[i]}`).then(
+        (res) => {
+          setSkills((skills) => [...skills, res.data]);
+        }
+      );
     }
-  }, []);
+  }, [skillType]);
   let total = 0;
   const values = () => {
     if (skills) {
@@ -47,7 +28,7 @@ function SkillsPieChart({ skillType }) {
             result.push({
               title: skill,
               value: skills[i][skill][0].result,
-              color: colors[index],
+              color: COLORS[index],
             });
           }
           index++;
@@ -62,7 +43,9 @@ function SkillsPieChart({ skillType }) {
     <PieChart
       data={pieChartValues}
       label={(data) =>
-        `${data.dataEntry.title} ${(data.dataEntry.value / total) * 100}%`
+        `${data.dataEntry.title} ${((data.dataEntry.value / total) * 100)
+          .toString()
+          .slice(0, 5)}%`
       }
       style={{ fontSize: "2" }}
     />
