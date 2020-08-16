@@ -41,7 +41,9 @@ function StudentPage(props) {
                       {student._existing_magic_skills.map((skill) => (
                         <li
                           key={Date.now() * Math.random()}
-                        >{`${skill.name} at level ${skill.level}`}</li>
+                        >{`${skill.name.replace("_", " ")} at level ${
+                          skill.level
+                        }`}</li>
                       ))}
                     </ul>
                   </Card.Body>

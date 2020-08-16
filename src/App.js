@@ -1,16 +1,17 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Row, Container, Col } from "react-bootstrap";
 import Axios from "axios";
 import UserContext from "./context/UserContext";
 import "./App.css";
-import AdminDashboard from "./components/AdminDashboard";
-import Login from "./components/Login";
-import SignUp from "./components/SignUp";
 import PrivateRoute from "./components/PrivateRoute";
 import TopNav from "./components/TopNav";
-import StudentPage from "./components/StudentPage";
-import StudentForm from "./components/StudentForm";
+
+const AdminDashboard = React.lazy(() => import("./components/AdminDashboard"));
+const Login = React.lazy(() => import("./components/Login"));
+const SignUp = React.lazy(() => import("./components/SignUp"));
+const StudentPage = React.lazy(() => import("./components/StudentPage"));
+const StudentForm = React.lazy(() => import("./components/StudentForm"));
 
 class App extends React.Component {
   constructor(props) {
@@ -83,22 +84,74 @@ class App extends React.Component {
                 />
                 <Switch>
                   <Route exact path="/admin-dashboard">
-                    <AdminDashboard students={this.state.students} />
+                    <Suspense
+                      fallback={
+                        <div className="text-center">
+                          <div
+                            className="spinner-grow text-secondary"
+                            role="status"
+                          >
+                            <span className="sr-only">Loading...</span>
+                          </div>
+                        </div>
+                      }
+                    >
+                      <AdminDashboard students={this.state.students} />
+                    </Suspense>
                   </Route>
                   <Route path="/add-student">
                     <StudentForm />
                   </Route>
                   <Route path="/edit-student/:email">
-                    <StudentForm edit="true" />
+                    <Suspense
+                      fallback={
+                        <div className="text-center">
+                          <div
+                            className="spinner-grow text-secondary"
+                            role="status"
+                          >
+                            <span className="sr-only">Loading...</span>
+                          </div>
+                        </div>
+                      }
+                    >
+                      <StudentForm edit="true" />
+                    </Suspense>
                   </Route>
                   <Route path="/login">
                     <Login />
                   </Route>
                   <Route path="/signup">
-                    <SignUp />
+                    <Suspense
+                      fallback={
+                        <div className="text-center">
+                          <div
+                            className="spinner-grow text-secondary"
+                            role="status"
+                          >
+                            <span className="sr-only">Loading...</span>
+                          </div>
+                        </div>
+                      }
+                    >
+                      <SignUp />
+                    </Suspense>
                   </Route>
                   <Route path="/user-page/:email">
-                    <StudentPage />
+                    <Suspense
+                      fallback={
+                        <div className="text-center">
+                          <div
+                            className="spinner-grow text-secondary"
+                            role="status"
+                          >
+                            <span className="sr-only">Loading...</span>
+                          </div>
+                        </div>
+                      }
+                    >
+                      <StudentPage />
+                    </Suspense>
                   </Route>
                 </Switch>
               </Col>
