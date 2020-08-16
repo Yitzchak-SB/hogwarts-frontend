@@ -1,6 +1,8 @@
 import React, { useState, useContext } from "react";
 import { Button, Modal } from "react-bootstrap";
 import UserContext from "../context/UserContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 function DeleteModal({ student }) {
   const [show, setShow] = useState(false);
@@ -15,8 +17,8 @@ function DeleteModal({ student }) {
 
   return (
     <>
-      <Button variant="light" onClick={handleShow}>
-        Delete Student
+      <Button className="button-color" onClick={handleShow}>
+        <FontAwesomeIcon icon={faTrashAlt} />
       </Button>
 
       <Modal show={show} onHide={handleClose}>
@@ -25,10 +27,10 @@ function DeleteModal({ student }) {
         </Modal.Header>
         <Modal.Body>Are You Sure You Want To Delete This Student?</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button className="button-color" onClick={handleClose}>
             No, Cancel.
           </Button>
-          <Button variant="primary" onClick={handleDelete}>
+          <Button className="button-color" onClick={handleDelete}>
             Yes, Delete.
           </Button>
         </Modal.Footer>

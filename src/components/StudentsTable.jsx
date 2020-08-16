@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
 import { useHistory, Link } from "react-router-dom";
-import { Button } from "@material-ui/core";
+import { Table, Button } from "react-bootstrap";
+import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UserContext from "../context/UserContext";
 import DeleteModal from "./DeleteModal";
-import { Table } from "react-bootstrap";
 import ProfilePic from "./ProfilePic";
 
 function StudentsTable(props) {
@@ -11,7 +12,7 @@ function StudentsTable(props) {
   const context = useContext(UserContext);
 
   const redirectOnClick = (event, student) => {
-    history.push(`/user-page/${student.firstName}/${student.lastName}`);
+    history.push(`/user-page/${student.email}`);
   };
 
   const GetSkillStr = (object) => {
@@ -19,12 +20,16 @@ function StudentsTable(props) {
     let existingSkills = "";
     if (object._existing_magic_skills) {
       for (let skill in object._existing_magic_skills) {
-        existingSkills += `${object._existing_magic_skills[skill].name} Level ${object._existing_magic_skills[skill].level} `;
+        if (object._existing_magic_skills[skill].level) {
+          existingSkills += `${object._existing_magic_skills[skill].name} Level ${object._existing_magic_skills[skill].level} `;
+        }
       }
     }
     if (object._desired_magic_skills) {
       for (let skill in object._desired_magic_skills) {
-        desiredSkills += `${object._desired_magic_skills[skill].name} Level ${object._desired_magic_skills[skill].level} \n`;
+        if (object._desired_magic_skills[skill].level) {
+          desiredSkills += `${object._desired_magic_skills[skill].name} Level ${object._desired_magic_skills[skill].level} \n`;
+        }
       }
     }
     return { desire: desiredSkills, exist: existingSkills };
@@ -52,7 +57,7 @@ function StudentsTable(props) {
   return (
     <Table size="sm" responsive>
       <thead>
-        <tr className="table-row">
+        <tr key={Date.now() * Math.random()} className="table-row">
           {columns.map((column) => (
             <th key={Date.now() * Math.random()}>{column.label}</th>
           ))}
@@ -65,26 +70,13 @@ function StudentsTable(props) {
             <tr className="table-row" key={Date.now() * Math.random()}>
               {columns.map((column) => {
                 if (column.tag === "image_url") {
-                  if (student[column.tag]) {
-                    return (
-                      <td className="table-cell">
-                        {" "}
-                        <ProfilePic url={student[column.tag]} />
-                      </td>
-                    );
-                  } else {
-                    return (
-                      <td
-                        key={Date.now() * Math.random()}
-                        className="table-cell"
-                      >
-                        {" "}
-                        <ProfilePic url="https://img.freepik.com/free-vector/wizard-warlock-man-face-with-hat-beard_8169-245.jpg?size=338&ext=jpg" />
-                      </td>
-                    );
-                  }
+                  return (
+                    <td key={Date.now() * Math.random()} className="table-cell">
+                      {" "}
+                      <ProfilePic url={student.image_url} />
+                    </td>
+                  );
                 }
-                const value = student[column.tag];
                 return (
                   <td
                     className="link table-cell"
@@ -93,15 +85,20 @@ function StudentsTable(props) {
                     }}
                     key={Date.now() * Math.random()}
                   >
-                    {value}
+                    <span>{student[column.tag]}</span>
                   </td>
                 );
               })}
 
-              <td className="table-cell" key={Date.now() * Math.random()}>
+              <td
+                className="table-cell mt-5 pt-5 mb-5 pb-5"
+                key={Date.now() * Math.random()}
+              >
                 <DeleteModal student={student} />
                 <Link to={`/edit-student/${student.email}`}>
-                  <Button>Edit Student</Button>
+                  <Button className="mt-3 button-color">
+                    <FontAwesomeIcon icon={faPencilAlt} />
+                  </Button>
                 </Link>
               </td>
             </tr>

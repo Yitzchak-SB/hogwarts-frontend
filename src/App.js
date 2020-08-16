@@ -1,13 +1,13 @@
 import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Row, Container, Col } from "react-bootstrap";
+import Axios from "axios";
+import UserContext from "./context/UserContext";
 import "./App.css";
 import AdminDashboard from "./components/AdminDashboard";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
-import UserContext from "./context/UserContext";
-import Axios from "axios";
-import { Container } from "@material-ui/core";
 import TopNav from "./components/TopNav";
 import StudentPage from "./components/StudentPage";
 import StudentForm from "./components/StudentForm";
@@ -62,8 +62,8 @@ class App extends React.Component {
 
   render() {
     return (
-      <Router>
-        <Container>
+      <Container fluid className="app">
+        <Router>
           <UserContext.Provider
             value={{
               user: this.state.user,
@@ -73,37 +73,39 @@ class App extends React.Component {
               updateStudents: this.updateStudents,
             }}
           >
-            <div className="app">
-              <TopNav />
-              <PrivateRoute
-                dashboard="/admin-dashboard"
-                login="/login"
-                user={this.state.user}
-              />
-            </div>
-            <Switch>
-              <Route exact path="/admin-dashboard">
-                <AdminDashboard students={this.state.students} />
-              </Route>
-              <Route path="/add-student">
-                <StudentForm />
-              </Route>
-              <Route path="/edit-student/:email">
-                <StudentForm edit="true" />
-              </Route>
-              <Route path="/login">
-                <Login />
-              </Route>
-              <Route path="/signup">
-                <SignUp />
-              </Route>
-              <Route path="/user-page/:firstName/:lastName">
-                <StudentPage />
-              </Route>
-            </Switch>
+            <Row>
+              <Col sm={12}>
+                <TopNav />
+                <PrivateRoute
+                  dashboard="/admin-dashboard"
+                  login="/login"
+                  user={this.state.user}
+                />
+                <Switch>
+                  <Route exact path="/admin-dashboard">
+                    <AdminDashboard students={this.state.students} />
+                  </Route>
+                  <Route path="/add-student">
+                    <StudentForm />
+                  </Route>
+                  <Route path="/edit-student/:email">
+                    <StudentForm edit="true" />
+                  </Route>
+                  <Route path="/login">
+                    <Login />
+                  </Route>
+                  <Route path="/signup">
+                    <SignUp />
+                  </Route>
+                  <Route path="/user-page/:email">
+                    <StudentPage />
+                  </Route>
+                </Switch>
+              </Col>
+            </Row>
           </UserContext.Provider>
-        </Container>
-      </Router>
+        </Router>
+      </Container>
     );
   }
 }

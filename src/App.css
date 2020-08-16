@@ -1,7 +1,19 @@
-.app {
-  background-image: url(./hogwarts.png);
-  /*min-height: 100vh; */
-  z-index: -50;
+body {
+  margin: none;
+  padding: none;
+  background-color: #d9a78b;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.text-cream {
+  color: #f8f5c9;
+}
+
+.text-wine {
+  color: #a63232;
 }
 
 .link {
@@ -9,5 +21,50 @@
 }
 
 .table-cell {
-  width: 50px;
+  color: #a63232;
+}
+
+.nav-bar {
+  background-color: #401c1c;
+  padding: 25px;
+}
+
+.table-row {
+  font-size: 16px;
+}
+
+.dash-card {
+  box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
+    0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+    0 100px 80px rgba(0, 0, 0, 0.12);
+
+  margin: 100px auto;
+  padding: 10px;
+  background: #f8f5c9;
+  border-radius: 5px;
+}
+
+.dash-card input {
+  width: 400px;
+  display: block;
+}
+
+.button-color {
+  border: none;
+  background-color: #a63232;
+  border: 1px solid #f8f5c9;
+  color: #f8f5c9;
+}
+
+.button-color:hover {
+  color: #a63232;
+  border: 1px solid #a63232;
+  background-color: #f8f5c9;
+}
+
+.card-title {
+  color: #a63232;
+  text-align: center;
+  margin-top: 8px;
 }

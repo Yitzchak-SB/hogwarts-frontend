@@ -8,13 +8,15 @@ function SkillsPieChart({ skillType }) {
   const [skills, setSkills] = useState([]);
 
   useEffect(() => {
-    for (let i = 0; i < SKILLS.length; i++) {
-      Axios.get(`http://127.0.0.1:5000//${skillType}?skill=${SKILLS[i]}`).then(
-        (res) => {
-          setSkills((skills) => [...skills, res.data]);
-        }
-      );
-    }
+    const urls = SKILLS.map((skill) =>
+      Axios.get(`http://127.0.0.1:5000//${skillType}?skill=${skill.name}`)
+    );
+    Axios.all(urls).then(
+      Axios.spread((...responses) => {
+        const results = responses.map((response) => response.data);
+        setSkills(results);
+      })
+    );
   }, [skillType]);
   let total = 0;
   const values = () => {
@@ -23,13 +25,15 @@ function SkillsPieChart({ skillType }) {
       let index = 0;
       for (let i = 0; i < skills.length; i++) {
         for (let skill in skills[i]) {
-          if (skills[i][skill][0]) {
-            total += skills[i][skill][0].result;
-            result.push({
-              title: skill,
-              value: skills[i][skill][0].result,
-              color: COLORS[index],
-            });
+          if (skills[i][skill]) {
+            if (skills[i][skill][0]) {
+              total += skills[i][skill][0].result;
+              result.push({
+                title: skill,
+                value: skills[i][skill][0].result,
+                color: COLORS[index],
+              });
+            }
           }
           index++;
         }
@@ -37,7 +41,6 @@ function SkillsPieChart({ skillType }) {
       return result;
     }
   };
-
   const pieChartValues = values();
   return (
     <PieChart

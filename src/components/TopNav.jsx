@@ -7,16 +7,16 @@ import { useState } from "react";
 import Axios from "axios";
 import ProfilePic from "./ProfilePic";
 import { PROFILE_URL } from "../data/constants";
+import "../App.css";
 
 const TopNav = () => {
   const { user, setUser } = useContext(UserContext);
   const [added, setAdded] = useState(null);
 
   const date = new Date();
-  const dateString = `${date.getDate()}_${date.getMonth()}_${date
-    .getFullYear()
-    .toString()
-    .slice(2)}`;
+  const dateString = `${date.getFullYear()}_${
+    date.getMonth() + 1
+  }_${date.getDate()}`;
 
   useEffect(() => {
     Axios.get(`http://127.0.0.1:5000//student?date=${dateString}`).then(
@@ -33,50 +33,53 @@ const TopNav = () => {
   return (
     <>
       {!user ? (
-        <Navbar bg="dark" variant="dark">
-          <Navbar.Brand>Hogwarts</Navbar.Brand>
+        <Navbar className="nav-bar">
+          <Navbar.Brand style={{ color: "#f8f5c9" }}>Hogwarts</Navbar.Brand>
           <Nav className="mr-auto">
             <Nav className="mr-2">
-              <Link className="text-muted" to="/login">
+              <Link className="text-cream" to="/login">
                 Login
               </Link>
             </Nav>
             <Nav className="mr-2">
-              <Link className="text-muted" to="/signup">
+              <Link className="text-cream" to="/signup">
                 Sign Up
               </Link>
             </Nav>
           </Nav>
         </Navbar>
       ) : (
-        <Navbar bg="dark" variant="dark">
-          <Navbar.Brand>Hogwarts</Navbar.Brand>
+        <Navbar className="nav-bar">
+          <Navbar.Brand style={{ color: "#f8f5c9" }}>Hogwarts</Navbar.Brand>
           <Nav className="mr-auto">
             <Nav className="mr-2">
-              <Link className="text-muted" to="/admin-dashboard">
+              <Link className="text-cream" to="/admin-dashboard">
                 Home
               </Link>
             </Nav>
             <Nav className="mr-2">
-              <Link className="text-muted" to="/add-student">
+              <Link className="text-cream" to="/add-student">
                 Add Students
               </Link>
             </Nav>
           </Nav>
           <Nav>
-            <Navbar.Text className="mr-sm-2 text-white">
+            <Navbar.Text style={{ color: "#f8f5c9" }} className="mr-sm-2">
               Welcome {user._first_name}
             </Navbar.Text>
             {user._img_url ? (
-              <ProfilePic url={user._img_url} />
+              <ProfilePic size={30} url={user._img_url} />
             ) : (
-              <ProfilePic url={PROFILE_URL} />
+              <ProfilePic size={30} url={PROFILE_URL} />
             )}
-            <Navbar.Text className="mr-sm-2 ml-sm-2  text-muted">
-              {added.result[0].count} Students Were Added Today
+            <Navbar.Text
+              style={{ color: "#f8f5c9" }}
+              className="mr-sm-2 ml-sm-2"
+            >
+              {added.result} Students Were Added Today
             </Navbar.Text>
           </Nav>
-          <Button onClick={handleLogOut} variant="outline-info">
+          <Button className="text-cream button-color" onClick={handleLogOut}>
             Log Out
           </Button>
         </Navbar>

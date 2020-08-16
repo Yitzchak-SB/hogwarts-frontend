@@ -45,7 +45,7 @@ class Login extends React.Component {
         justify="space-around"
         alignItems="center"
       >
-        <h2>Admin Login</h2>
+        <h2 className="text-cream">Admin Login</h2>
         <form>
           <Grid item>
             <TextField

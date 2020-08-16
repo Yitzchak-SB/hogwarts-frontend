@@ -32,7 +32,7 @@ class ProfilePic extends React.Component {
   render() {
     return (
       <div>
-        <Avatar size="30" round={true} src={this.state.src} />
+        <Avatar size={this.props.size} round={true} src={this.state.src} />
       </div>
     );
   }
