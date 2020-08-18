@@ -2,19 +2,12 @@ import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
+import Spinner from "./components/Spinner";
 const App = React.lazy(() => import("./App"));
 
 ReactDOM.render(
   <React.StrictMode>
-    <Suspense
-      fallback={
-        <div className="text-center">
-          <div className="spinner-grow text-secondary" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        </div>
-      }
-    >
+    <Suspense fallback={<Spinner />}>
       <App />
     </Suspense>
   </React.StrictMode>,

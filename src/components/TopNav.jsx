@@ -1,10 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Navbar, Nav, Button } from "react-bootstrap";
-import UserContext from "../context/UserContext";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
-import { useState } from "react";
+import { format } from "date-fns";
 import Axios from "axios";
+import UserContext from "../context/UserContext";
 import ProfilePic from "./ProfilePic";
 import { PROFILE_URL } from "../data/constants";
 import "../App.css";
@@ -34,49 +33,60 @@ const TopNav = () => {
     <>
       {!user ? (
         <Navbar className="nav-bar">
-          <Navbar.Brand style={{ color: "#f8f5c9" }}>Hogwarts</Navbar.Brand>
+          <Navbar.Brand className="mr-3" style={{ color: "#f8f5c9" }}>
+            Hogwarts
+          </Navbar.Brand>
           <Nav className="mr-auto">
-            <Nav className="mr-2">
-              <Link className="text-cream" to="/login">
-                Login
-              </Link>
+            <Nav className="mr-3 nav-link">
+              <Navbar.Text style={{ color: "#f8f5c9" }}>
+                Probably The Best School In The World.
+              </Navbar.Text>
             </Nav>
-            <Nav className="mr-2">
-              <Link className="text-cream" to="/signup">
-                Sign Up
-              </Link>
-            </Nav>
+          </Nav>
+          <Nav>
+            <Navbar.Text
+              style={{ color: "#f8f5c9" }}
+              className="mr-sm-3 ml-sm-3"
+            >
+              {format(new Date(Date.now()), "dd/MM/yyyy")}
+            </Navbar.Text>
           </Nav>
         </Navbar>
       ) : (
         <Navbar className="nav-bar">
-          <Navbar.Brand style={{ color: "#f8f5c9" }}>Hogwarts</Navbar.Brand>
+          <Navbar.Brand style={{ color: "#f8f5c9" }}>
+            <Link className="text-cream nav-link" to="/admin-dashboard">
+              Hogwarts
+            </Link>
+          </Navbar.Brand>
           <Nav className="mr-auto">
-            <Nav className="mr-2">
-              <Link className="text-cream" to="/admin-dashboard">
-                Home
-              </Link>
-            </Nav>
-            <Nav className="mr-2">
-              <Link className="text-cream" to="/add-student">
-                Add Students
-              </Link>
+            <Nav className="mr-3">
+              <Nav>
+                <Navbar.Text style={{ color: "#f8f5c9" }} className="mr-sm-2">
+                  Welcome {user._first_name}
+                </Navbar.Text>
+              </Nav>
+              {user._img_url ? (
+                <ProfilePic size={30} url={user._img_url} />
+              ) : (
+                <ProfilePic size={30} url={PROFILE_URL} />
+              )}
             </Nav>
           </Nav>
           <Nav>
-            <Navbar.Text style={{ color: "#f8f5c9" }} className="mr-sm-2">
-              Welcome {user._first_name}
-            </Navbar.Text>
-            {user._img_url ? (
-              <ProfilePic size={30} url={user._img_url} />
-            ) : (
-              <ProfilePic size={30} url={PROFILE_URL} />
-            )}
             <Navbar.Text
               style={{ color: "#f8f5c9" }}
-              className="mr-sm-2 ml-sm-2"
+              className="mr-sm-3 ml-sm-3"
             >
               {added.result} Students Were Added Today
+            </Navbar.Text>
+          </Nav>
+          <Nav>
+            <Navbar.Text
+              style={{ color: "#f8f5c9" }}
+              className="mr-sm-3 ml-sm-3"
+            >
+              {format(new Date(Date.now()), "dd/MM/yyyy")}
             </Navbar.Text>
           </Nav>
           <Button className="text-cream button-color" onClick={handleLogOut}>

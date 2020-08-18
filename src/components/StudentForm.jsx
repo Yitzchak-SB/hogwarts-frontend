@@ -6,7 +6,7 @@ import UserContext from "../context/UserContext";
 import AddStudentSkill from "./AddStudentSkill";
 import "../App.css";
 import ProfilePic from "./ProfilePic";
-import { PROFILE_URL, SKILLS } from "../data/constants";
+import { PROFILE_URL } from "../data/constants";
 
 function StudentForm({ edit }) {
   const [student, setStudent] = useState(null);
@@ -16,10 +16,9 @@ function StudentForm({ edit }) {
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
   const [url, setUrl] = useState(PROFILE_URL);
-  const [activeSkills, setActiveSkills] = useState(SKILLS);
-  const [desiredSkills, setDesiredSkills] = useState(SKILLS);
+  const [activeSkills, setActiveSkills] = useState(false);
+  const [desiredSkills, setDesiredSkills] = useState(false);
   const [validated, setValidated] = useState(false);
-  const [buttonText, setButtonText] = useState("Check Form");
 
   const emailParam = useParams(email);
 
@@ -62,7 +61,6 @@ function StudentForm({ edit }) {
     event.preventDefault();
     validateInput(event);
     if (validated) {
-      setButtonText("Submit");
       const student = {
         first_name: firstName,
         last_name: lastName,
@@ -222,27 +220,29 @@ function StudentForm({ edit }) {
                 </Form.Control.Feedback>
               </>
             )}
-
-            <AddStudentSkill
-              skills={activeSkills}
-              exist={true}
-              type="Existing"
-              submitSkills={handleExistingSkills}
-            />
-            <AddStudentSkill
-              skills={desiredSkills}
-              exist={false}
-              type="Desired"
-              submitSkills={handleDesiredSkills}
-            />
             <Button
               onClick={handleSubmit}
               type="submit"
               className="text-cream button-color mt-2 "
             >
-              {buttonText}
+              Submit
             </Button>
+            <Form.Control.Feedback className="text-wine mt-1" type="valid">
+              The Form is Valid. Click Again to Submit.
+            </Form.Control.Feedback>
           </Form>
+          <AddStudentSkill
+            skills={activeSkills}
+            exist={true}
+            type="Existing"
+            submitSkills={handleExistingSkills}
+          />
+          <AddStudentSkill
+            skills={desiredSkills}
+            exist={false}
+            type="Desired"
+            submitSkills={handleDesiredSkills}
+          />
         </Card>
       </Col>
     </Row>

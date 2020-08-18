@@ -6,12 +6,11 @@ import UserContext from "./context/UserContext";
 import "./App.css";
 import PrivateRoute from "./components/PrivateRoute";
 import TopNav from "./components/TopNav";
+import Spinner from "./components/Spinner";
+import Landing from "./components/Landing";
 
 const AdminDashboard = React.lazy(() => import("./components/AdminDashboard"));
-const Login = React.lazy(() => import("./components/Login"));
-const SignUp = React.lazy(() => import("./components/SignUp"));
 const StudentPage = React.lazy(() => import("./components/StudentPage"));
-const StudentForm = React.lazy(() => import("./components/StudentForm"));
 
 class App extends React.Component {
   constructor(props) {
@@ -19,38 +18,46 @@ class App extends React.Component {
     this.setUser = this.setUser.bind(this);
     this.updateStudents = this.updateStudents.bind(this);
     this.deleteStudent = this.deleteStudent.bind(this);
-    this.interval = false;
-    this.state = { user: null, students: [] };
+    this.setTerm = this.setTerm.bind(this);
+    this.state = {
+      user: null,
+      students: [],
+      term: "name_asc",
+      index: 0,
+    };
   }
 
-  getAllStudents() {
-    Axios.get("http://127.0.0.1:5000/students").then((res) => {
-      const students = [];
-      for (let student in res.data.students) {
-        students.push(res.data.students[student]);
-      }
-      this.setState({ students: students });
-    });
+  async getAllStudents() {
+    const newStudents = [];
+    const res = await Axios.get(
+      `http://127.0.0.1:5000/students?term=${this.state.term}&index=${this.state.index}`
+    );
+    for (let student in res.data.students) {
+      newStudents.push(res.data.students[student]);
+    }
+    this.setState((state) => ({
+      students: [...state.students, ...newStudents],
+      index: state.index + 5,
+    }));
   }
 
   componentDidMount() {
     this.getAllStudents();
-    this.interval = setInterval(() => this.getAllStudents(), 15000);
   }
 
-  componentWillUnmount() {
-    clearInterval(this.interval);
+  setTerm(term) {
+    this.setState({ term: term, students: null });
+    this.getAllStudents();
   }
 
-  deleteStudent(event, student) {
+  async deleteStudent(event, student) {
     const request = { admin: this.state.user, student: student };
     const newStudents = this.state.students.filter(
       (user) => student.email !== user.email
     );
     this.setState({ students: newStudents });
-    Axios.post("http://127.0.0.1:5000/student-del", request).then((res) =>
-      this.getAllStudents()
-    );
+    await Axios.post("http://127.0.0.1:5000/student-del", request);
+    this.getAllStudents();
   }
 
   updateStudents() {
@@ -62,14 +69,15 @@ class App extends React.Component {
   }
 
   render() {
+    const { user, students } = this.state;
     return (
       <Container fluid className="app">
         <Router>
           <UserContext.Provider
             value={{
-              user: this.state.user,
+              user: user,
               setUser: this.setUser,
-              students: this.state.students,
+              students: students,
               deleteStudent: this.deleteStudent,
               updateStudents: this.updateStudents,
             }}
@@ -79,77 +87,24 @@ class App extends React.Component {
                 <TopNav />
                 <PrivateRoute
                   dashboard="/admin-dashboard"
-                  login="/login"
+                  landing="/landing"
                   user={this.state.user}
                 />
                 <Switch>
                   <Route exact path="/admin-dashboard">
-                    <Suspense
-                      fallback={
-                        <div className="text-center">
-                          <div
-                            className="spinner-grow text-secondary"
-                            role="status"
-                          >
-                            <span className="sr-only">Loading...</span>
-                          </div>
-                        </div>
-                      }
-                    >
-                      <AdminDashboard students={this.state.students} />
+                    <Suspense fallback={<Spinner />}>
+                      <AdminDashboard
+                        students={this.state.students}
+                        setTerm={this.setTerm}
+                        ter={this.state.term}
+                      />
                     </Suspense>
                   </Route>
-                  <Route path="/add-student">
-                    <StudentForm />
-                  </Route>
-                  <Route path="/edit-student/:email">
-                    <Suspense
-                      fallback={
-                        <div className="text-center">
-                          <div
-                            className="spinner-grow text-secondary"
-                            role="status"
-                          >
-                            <span className="sr-only">Loading...</span>
-                          </div>
-                        </div>
-                      }
-                    >
-                      <StudentForm edit="true" />
-                    </Suspense>
-                  </Route>
-                  <Route path="/login">
-                    <Login />
-                  </Route>
-                  <Route path="/signup">
-                    <Suspense
-                      fallback={
-                        <div className="text-center">
-                          <div
-                            className="spinner-grow text-secondary"
-                            role="status"
-                          >
-                            <span className="sr-only">Loading...</span>
-                          </div>
-                        </div>
-                      }
-                    >
-                      <SignUp />
-                    </Suspense>
+                  <Route path="/landing">
+                    <Landing />
                   </Route>
                   <Route path="/user-page/:email">
-                    <Suspense
-                      fallback={
-                        <div className="text-center">
-                          <div
-                            className="spinner-grow text-secondary"
-                            role="status"
-                          >
-                            <span className="sr-only">Loading...</span>
-                          </div>
-                        </div>
-                      }
-                    >
+                    <Suspense fallback={<Spinner />}>
                       <StudentPage />
                     </Suspense>
                   </Route>

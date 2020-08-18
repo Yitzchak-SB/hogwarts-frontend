@@ -68,3 +68,25 @@ ul {
   text-align: center;
   margin-top: 8px;
 }
+
+.nav-link a {
+  color: #f8f5c9;
+}
+
+.nav-link a:hover {
+  text-decoration: none;
+  color: #401c1c;
+  background-color: #f8f5c9;
+}
+
+.admin-tab > a {
+  margin-right: 3px;
+  background-color: #a63232;
+  color: #f8f5c9;
+}
+
+.admin-tab > a:hover {
+  margin-right: 3px;
+  color: #a63232;
+  background-color: #f8f5c9;
+}

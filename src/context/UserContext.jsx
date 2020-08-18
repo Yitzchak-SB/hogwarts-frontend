@@ -5,6 +5,7 @@ const UserContext = React.createContext({
   setUser: null,
   students: null,
   deleteStudent: null,
+  getStudents: null,
 });
 
 export default UserContext;
