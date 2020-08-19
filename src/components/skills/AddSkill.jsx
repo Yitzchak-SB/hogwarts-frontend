@@ -48,6 +48,7 @@ const AddSkill = ({ history }) => {
     <Row className="d-flex justify-content-center align-items-center">
       <Col sm={{ span: 6 }}>
         <Card className="dash-card d-flex flex-column justify-content-center align-items-center">
+          <Card.Header>Add New Skill</Card.Header>
           <Form
             className="d-flex flex-column justify-content-center align-items-center"
             noValidate
@@ -55,6 +56,7 @@ const AddSkill = ({ history }) => {
           >
             <Form.Label className="text-wine mt-1">Skill Name:</Form.Label>
             <Form.Control
+              style={{ width: "100%" }}
               required
               className="mt-1 text-wine"
               onChange={handleName}
@@ -68,6 +70,7 @@ const AddSkill = ({ history }) => {
               Skill Description:
             </Form.Label>
             <Form.Control
+              style={{ width: "100%" }}
               required
               type="textarea"
               className="mt-1 text-wine"
@@ -82,6 +85,7 @@ const AddSkill = ({ history }) => {
               Max number of levels:
             </Form.Label>
             <Form.Control
+              style={{ width: "100%" }}
               required
               type="number"
               className="mt-1 text-wine"

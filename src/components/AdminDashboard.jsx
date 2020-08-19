@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Tabs, Tab } from "react-bootstrap";
-import AdminDashboardStudents from "./AdminDashboardStudents";
-import AdminDashboardSkills from "./AdminDashboardSkills";
+import AdminDashboardStudents from "./students/AdminDashboardStudents";
+import AdminDashboardSkills from "./skills/AdminDashboardSkills";
 import StudentForm from "./StudentForm";
 
 function AdminDashboard({ students, setTerm, term }) {

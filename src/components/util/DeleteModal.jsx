@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Button, Modal } from "react-bootstrap";
-import UserContext from "../context/UserContext";
+import UserContext from "../../context/UserContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 

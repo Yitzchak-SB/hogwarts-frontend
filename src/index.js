@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
-import Spinner from "./components/Spinner";
+import Spinner from "./components/util/Spinner";
 const App = React.lazy(() => import("./App"));
 
 ReactDOM.render(

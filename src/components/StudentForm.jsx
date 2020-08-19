@@ -3,10 +3,11 @@ import { withRouter, useHistory, useParams } from "react-router-dom";
 import Axios from "axios";
 import { Card, Row, Col, Button, Form } from "react-bootstrap";
 import UserContext from "../context/UserContext";
-import AddStudentSkill from "./AddStudentSkill";
+import AddStudentSkill from "./students/AddStudentSkill";
 import "../App.css";
-import ProfilePic from "./ProfilePic";
+import ProfilePic from "./students/ProfilePic";
 import { PROFILE_URL } from "../data/constants";
+import ErrorModal from "./util/ErrorModel";
 
 function StudentForm({ edit }) {
   const [student, setStudent] = useState(null);
@@ -19,6 +20,7 @@ function StudentForm({ edit }) {
   const [activeSkills, setActiveSkills] = useState(false);
   const [desiredSkills, setDesiredSkills] = useState(false);
   const [validated, setValidated] = useState(false);
+  const [emailError, setEmailError] = useState(false);
 
   const emailParam = useParams(email);
 
@@ -30,7 +32,12 @@ function StudentForm({ edit }) {
       event.preventDefault();
       event.stopPropagation();
     }
-
+    if (!edit) {
+      const emailCheck = students.filter(
+        (student) => student.email === event.target.value
+      );
+      if (emailCheck) return setEmailError(true);
+    }
     setValidated(true);
   };
 
@@ -97,6 +104,7 @@ function StudentForm({ edit }) {
     setLastName(event.target.value);
   }
   function handleEmail(event) {
+    if (emailError) setEmailError(false);
     setEmail(event.target.value);
   }
   function handlePassword1(event) {
@@ -227,10 +235,14 @@ function StudentForm({ edit }) {
             >
               Submit
             </Button>
-            <Form.Control.Feedback className="text-wine mt-1" type="valid">
-              The Form is Valid. Click Again to Submit.
-            </Form.Control.Feedback>
           </Form>
+          {emailError && (
+            <ErrorModal
+              title="We Have A Problem!"
+              message="The email you provided already exists. Please fill in a different one."
+              footer="OK, Got it!"
+            />
+          )}
           <AddStudentSkill
             skills={activeSkills}
             exist={true}

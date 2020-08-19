@@ -3,8 +3,8 @@ import { useHistory, Link } from "react-router-dom";
 import { Table, Button, Spinner } from "react-bootstrap";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import UserContext from "../context/UserContext";
-import DeleteModal from "./DeleteModal";
+import UserContext from "../../context/UserContext";
+import DeleteModal from "../util/DeleteModal";
 import ProfilePic from "./ProfilePic";
 import InfiniteScroll from "react-infinite-scroll-component";
 

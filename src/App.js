@@ -6,8 +6,9 @@ import UserContext from "./context/UserContext";
 import "./App.css";
 import PrivateRoute from "./components/PrivateRoute";
 import TopNav from "./components/TopNav";
-import Spinner from "./components/Spinner";
-import Landing from "./components/Landing";
+import Spinner from "./components/util/Spinner";
+import Landing from "./components/util/Landing";
+import StudentForm from "./components/StudentForm";
 
 const AdminDashboard = React.lazy(() => import("./components/AdminDashboard"));
 const StudentPage = React.lazy(() => import("./components/StudentPage"));
@@ -24,6 +25,7 @@ class App extends React.Component {
       students: [],
       term: "name_asc",
       index: 0,
+      skills: null,
     };
   }
 
@@ -39,6 +41,16 @@ class App extends React.Component {
       students: [...state.students, ...newStudents],
       index: state.index + 5,
     }));
+
+    await Axios.get("http://127.0.0.1:5000/skills").then((res) => {
+      const skillsNames = res.data.skills.map((skill) => ({
+        name: skill.skill_name.replace("_", " "),
+        level: Math.floor(Math.random() * 6),
+        maxLevel: skill.num_of_levels,
+        description: skill.skill_description,
+      }));
+      this.setState({ skills: skillsNames });
+    });
   }
 
   componentDidMount() {
@@ -69,7 +81,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { user, students } = this.state;
+    const { user, students, skills } = this.state;
     return (
       <Container fluid className="app">
         <Router>
@@ -80,6 +92,7 @@ class App extends React.Component {
               students: students,
               deleteStudent: this.deleteStudent,
               updateStudents: this.updateStudents,
+              skills: skills,
             }}
           >
             <Row>
@@ -102,6 +115,11 @@ class App extends React.Component {
                   </Route>
                   <Route path="/landing">
                     <Landing />
+                  </Route>
+                  <Route path="/edit-student/:email">
+                    <Suspense fallback={<Spinner />}>
+                      <StudentForm edit={true} />
+                    </Suspense>
                   </Route>
                   <Route path="/user-page/:email">
                     <Suspense fallback={<Spinner />}>

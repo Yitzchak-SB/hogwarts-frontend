@@ -1,14 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { PieChart } from "react-minimal-pie-chart";
 import { useState } from "react";
 import Axios from "axios";
-import { SKILLS, COLORS } from "../data/constants";
+import { COLORS } from "../../data/constants";
+import UserContext from "../../context/UserContext";
 
 function SkillsPieChart({ skillType }) {
   const [skills, setSkills] = useState([]);
+  const context = useContext(UserContext);
 
   useEffect(() => {
-    const urls = SKILLS.map((skill) =>
+    const urls = context.skills.map((skill) =>
       Axios.get(`http://127.0.0.1:5000//${skillType}?skill=${skill.name}`)
     );
     Axios.all(urls).then(
@@ -17,7 +19,7 @@ function SkillsPieChart({ skillType }) {
         setSkills(results);
       })
     );
-  }, [skillType]);
+  }, [skillType, context.skills]);
   let total = 0;
   const values = () => {
     if (skills) {

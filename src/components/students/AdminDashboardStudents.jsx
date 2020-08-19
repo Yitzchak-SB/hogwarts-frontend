@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Card, Row, Col, DropdownButton, Dropdown } from "react-bootstrap";
 import StudentsTable from "./StudentsTable";
-import SkillsPieChart from "./SkillsPieChart";
-import "../App.css";
+import SkillsPieChart from "../skills/SkillsPieChart";
 import Axios from "axios";
 import AnalyticCard from "./AnalyticCard";
-import Spinner from "./Spinner";
+import Spinner from "../util/Spinner";
 
 function AdminDashboardStudents({ students, setTerm, term }) {
   const [lastUpdated, setLastUpdated] = useState(null);

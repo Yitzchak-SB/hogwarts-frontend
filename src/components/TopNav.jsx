@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import Axios from "axios";
 import UserContext from "../context/UserContext";
-import ProfilePic from "./ProfilePic";
+import ProfilePic from "./students/ProfilePic";
 import { PROFILE_URL } from "../data/constants";
 import "../App.css";
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Tabs, Tab } from "react-bootstrap";
-import Login from "./Login";
-import SignUp from "./SignUp";
+import Login from "../Login";
+import SignUp from "../SignUp";
 
 function Landing() {
   const [key, setKey] = useState("login");

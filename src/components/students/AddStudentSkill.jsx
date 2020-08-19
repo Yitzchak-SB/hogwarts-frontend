@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Form, Button, Row } from "react-bootstrap";
-import Axios from "axios";
+import UserContext from "../../context/UserContext";
 
 function AddStudentSkill(props) {
   const [skills, setSkills] = useState(null);
   const [done, setDone] = useState(false);
+  const context = useContext(UserContext);
 
   useEffect(() => {
-    if (props.skills) return setSkills(props.skills);
-    Axios.get("http://127.0.0.1:5000/skills").then((res) => {
-      const skillsNames = res.data.skills.map((skill) => ({
-        name: skill.skill_name,
-        level: Math.floor(Math.random() * 6),
+    if (props.skills) {
+      const skillsArray = props.skills.map((skill) => ({
+        name: skill.name,
+        level: skill.level,
         maxLevel: skill.num_of_levels,
       }));
-      setSkills(skillsNames);
-    });
-  }, [props.skills]);
+      setSkills(skillsArray);
+    }
+    setSkills(context.skills);
+  }, [props.skills, context.skills]);
 
   const handleChange = (event) => {
     const skillIndex =

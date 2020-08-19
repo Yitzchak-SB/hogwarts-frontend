@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import ProfilePic from "./ProfilePic";
+import ProfilePic from "./students/ProfilePic";
 import Axios from "axios";
 import { Card, Row } from "react-bootstrap";
 import { formatDistanceToNow } from "date-fns";
@@ -55,7 +55,9 @@ function StudentPage(props) {
                       {student._desired_magic_skills.map((skill) => (
                         <li
                           key={Date.now() * Math.random()}
-                        >{`${skill.name} at level ${skill.level}`}</li>
+                        >{`${skill.name.replace("_", " ")} at level ${
+                          skill.level
+                        }`}</li>
                       ))}
                     </ul>
                   </Card.Body>

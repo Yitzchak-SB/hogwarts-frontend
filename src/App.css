@@ -63,6 +63,20 @@ ul {
   background-color: #f8f5c9;
 }
 
+.button-color:focus {
+  border: none;
+  background-color: #a63232;
+  border: 1px solid #f8f5c9;
+  color: #f8f5c9;
+}
+
+.button-color:active {
+  border: none;
+  background-color: #a63232;
+  border: 1px solid #f8f5c9;
+  color: #f8f5c9;
+}
+
 .card-title {
   color: #a63232;
   text-align: center;
