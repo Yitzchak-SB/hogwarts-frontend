@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: none;
   padding: none;
@@ -39,7 +43,7 @@ ul {
     0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
     0 100px 80px rgba(0, 0, 0, 0.12);
 
-  margin: 100px auto;
+  margin: 40px;
   padding: 10px;
   background: #f8f5c9;
   border-radius: 5px;
@@ -48,6 +52,12 @@ ul {
 .dash-card input {
   width: 400px;
   display: block;
+}
+
+.student-card {
+  width: 300px;
+  height: 600px;
+  margin: 40px 0 40px 100px;
 }
 
 .button-color {

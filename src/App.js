@@ -58,7 +58,7 @@ class App extends React.Component {
   }
 
   setTerm(term) {
-    this.setState({ term: term, students: null });
+    this.setState({ term: term, students: [], index: 0 });
     this.getAllStudents();
   }
 

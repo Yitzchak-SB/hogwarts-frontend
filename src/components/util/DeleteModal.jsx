@@ -17,7 +17,7 @@ function DeleteModal({ student }) {
 
   return (
     <>
-      <Button className="button-color" onClick={handleShow}>
+      <Button className="button-color mt-3" onClick={handleShow}>
         <FontAwesomeIcon icon={faTrashAlt} />
       </Button>
 
