@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
@@ -13,6 +13,7 @@ import "../App.css";
 const TopNav = () => {
   const { user, setUser } = useContext(UserContext);
   const [added, setAdded] = useState(null);
+  let history = useHistory();
 
   const date = new Date();
   const dateString = `${date.getFullYear()}_${
@@ -29,13 +30,17 @@ const TopNav = () => {
 
   const handleLogOut = () => {
     setUser(null);
+    history.push("/landing");
   };
 
   return (
     <>
       {!user ? (
         <Navbar className="nav-bar">
-          <Navbar.Brand className="mr-3" style={{ color: "#f8f5c9" }}>
+          <Navbar.Brand
+            className="mr-3"
+            style={{ color: "#f8f5c9", fontSize: "40px" }}
+          >
             Hogwarts
           </Navbar.Brand>
           <Nav className="mr-auto">
@@ -56,10 +61,14 @@ const TopNav = () => {
         </Navbar>
       ) : (
         <Navbar className="nav-bar">
-          <Navbar.Brand style={{ color: "#f8f5c9" }}>
-            <Link className="text-cream nav-link" to="/admin-dashboard">
-              Hogwarts
-            </Link>
+          <Navbar.Brand style={{ color: "#f8f5c9", fontSize: "40px" }}>
+            {user.type === "admin" ? (
+              <Link className="text-cream nav-link" to="/admin-dashboard">
+                Hogwarts
+              </Link>
+            ) : (
+              "Hogwarts"
+            )}
           </Navbar.Brand>
           <Nav className="mr-auto">
             <Nav className="mr-3">

@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
+import "./fonts/MagicSchoolOne.ttf";
 import * as serviceWorker from "./serviceWorker";
 import Spinner from "./components/util/Spinner";
 const App = React.lazy(() => import("./App"));

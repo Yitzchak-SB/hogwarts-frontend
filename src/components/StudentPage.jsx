@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ProfilePic from "./students/ProfilePic";
 import axios from "axios";
-import { Card, Row } from "react-bootstrap";
+import Card from "react-bootstrap/Card";
+import Row from "react-bootstrap/Row";
 import { formatDistanceToNow } from "date-fns";
 import SkillsProgressBar from "./util/SkillsProgressBar";
 

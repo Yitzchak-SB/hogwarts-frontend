@@ -8,9 +8,12 @@ const SkillsProgressBar = ({ skills }) => {
         const percent = (100 / skill.num_of_levels) * skill.level;
         return (
           <div key={Date.now() * Math.random()}>
-            <p key={Date.now() * Math.random()} className="text-wine mt-1 mb-1">
+            <span
+              key={Date.now() * Math.random()}
+              className="text-wine mt-1 mb-1"
+            >
               {skill.name.replace("_", " ")}
-            </p>
+            </span>
             <ProgressBar
               key={Date.now() * Math.random()}
               style={{ width: "100%", backgroundColor: "#A69177" }}

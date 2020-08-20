@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from "react";
 import { PieChart } from "react-minimal-pie-chart";
 import { useState } from "react";
 import axios from "axios";
-import { COLORS } from "../../data/constants";
+import randomcolor from "randomcolor";
 import UserContext from "../../context/UserContext";
 
 function SkillsPieChart({ skillType }) {
@@ -24,7 +24,6 @@ function SkillsPieChart({ skillType }) {
   const values = () => {
     if (skills) {
       let result = [];
-      let index = 0;
       for (let i = 0; i < skills.length; i++) {
         for (let skill in skills[i]) {
           if (skills[i][skill]) {
@@ -33,11 +32,10 @@ function SkillsPieChart({ skillType }) {
               result.push({
                 title: skill,
                 value: skills[i][skill][0].result,
-                color: COLORS[index],
+                color: randomcolor("#401c1c"),
               });
             }
           }
-          index++;
         }
       }
       return result;

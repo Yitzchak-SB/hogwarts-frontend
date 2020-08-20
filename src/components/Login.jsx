@@ -39,9 +39,14 @@ const Login = ({ type }) => {
     axios
       .post(url, user)
       .then((res) => {
-        setUser(res.data);
+        let userData = res.data;
+        userData.type = type;
+        setUser(userData);
       })
-      .then(() => history.push("/admin-dashboard"))
+      .then(() => {
+        if (type === "admin") history.push("/admin-dashboard");
+        if (type === "student") history.push(`/user-page/${userEmail}`);
+      })
       .catch((error) => {
         console.log(error);
         setLoginError(true);

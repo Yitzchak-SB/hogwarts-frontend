@@ -90,7 +90,7 @@ const App = () => {
                 user={user}
               />
               <Switch>
-                <Route exact path="/admin-dashboard">
+                <Route path="/admin-dashboard">
                   <Suspense fallback={<Spinner />}>
                     <AdminDashboard
                       students={students}
@@ -107,7 +107,7 @@ const App = () => {
                     <StudentForm edit={true} />
                   </Suspense>
                 </Route>
-                <Route path="/user-page/:email">
+                <Route exact path="/user-page/:email">
                   <Suspense fallback={<Spinner />}>
                     <StudentPage />
                   </Suspense>

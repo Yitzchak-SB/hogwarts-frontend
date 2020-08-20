@@ -24,11 +24,11 @@ const BackCard = ({ student, handleClick }) => {
       <Card.Body>
         <Row>
           <Col sm={6}>
-            <h4 className="text-wine">Existing</h4>
+            <h3 className="text-wine">Existing Skills</h3>
             <SkillsProgressBar skills={student._existing_magic_skills} />
           </Col>
           <Col sm={6}>
-            <h4 className="text-wine">Desired</h4>
+            <h3 className="text-wine">Desired Skills</h3>
             <SkillsProgressBar skills={student._desired_magic_skills} />
           </Col>
         </Row>
