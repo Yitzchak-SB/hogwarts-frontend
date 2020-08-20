@@ -1,9 +1,9 @@
 import React from "react";
-import { Card } from "react-bootstrap";
+import Card from "react-bootstrap/Card";
 
 const SkillCard = ({ name, levels, description }) => {
   return (
-    <Card className="dash-card">
+    <Card className="skill-card">
       <Card.Header className="text-center">
         {name.replace("_", " ")}
       </Card.Header>

@@ -1,8 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Navbar, Nav, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { format } from "date-fns";
-import Axios from "axios";
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
+import Button from "react-bootstrap/Button";
+import format from "date-fns/format";
+import axios from "axios";
 import UserContext from "../context/UserContext";
 import ProfilePic from "./students/ProfilePic";
 import { PROFILE_URL } from "../data/constants";
@@ -18,11 +20,11 @@ const TopNav = () => {
   }_${date.getDate()}`;
 
   useEffect(() => {
-    Axios.get(`http://127.0.0.1:5000//student?date=${dateString}`).then(
-      (res) => {
+    axios
+      .get(`http://127.0.0.1:5000//student?date=${dateString}`)
+      .then((res) => {
         setAdded(res.data);
-      }
-    );
+      });
   }, [user, dateString]);
 
   const handleLogOut = () => {

@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ProfilePic from "./students/ProfilePic";
-import Axios from "axios";
+import axios from "axios";
 import { Card, Row } from "react-bootstrap";
 import { formatDistanceToNow } from "date-fns";
+import SkillsProgressBar from "./util/SkillsProgressBar";
 
-function StudentPage(props) {
+const StudentPage = () => {
   const { email } = useParams("email");
   const [student, setStudent] = useState(null);
   const [date, setDate] = useState(false);
 
   useEffect(() => {
-    Axios.get(`http://127.0.0.1:5000/student/${email}`)
+    axios
+      .get(`http://127.0.0.1:5000/student/${email}`)
       .then((res) => {
         setStudent(res.data);
         setDate(
@@ -37,29 +39,15 @@ function StudentPage(props) {
                 <Card className="m-2 dash-card">
                   <Card.Header>Existing Magic Skills</Card.Header>
                   <Card.Body>
-                    <ul>
-                      {student._existing_magic_skills.map((skill) => (
-                        <li
-                          key={Date.now() * Math.random()}
-                        >{`${skill.name.replace("_", " ")} at level ${
-                          skill.level
-                        }`}</li>
-                      ))}
-                    </ul>
+                    <SkillsProgressBar
+                      skills={student._existing_magic_skills}
+                    />
                   </Card.Body>
                 </Card>
                 <Card className="m-2 dash-card">
                   <Card.Header>Desired Magic Skills</Card.Header>
                   <Card.Body>
-                    <ul>
-                      {student._desired_magic_skills.map((skill) => (
-                        <li
-                          key={Date.now() * Math.random()}
-                        >{`${skill.name.replace("_", " ")} at level ${
-                          skill.level
-                        }`}</li>
-                      ))}
-                    </ul>
+                    <SkillsProgressBar skills={student._desired_magic_skills} />
                   </Card.Body>
                 </Card>
               </Row>
@@ -74,6 +62,6 @@ function StudentPage(props) {
       )}
     </div>
   );
-}
+};
 
 export default StudentPage;

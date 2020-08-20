@@ -1,5 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Card, Row, Button } from "react-bootstrap";
+import Card from "react-bootstrap/Card";
+import Row from "react-bootstrap/Row";
+import Button from "react-bootstrap/Button";
 import UserContext from "../../context/UserContext";
 import SkillsByLevels from "./SkillsByLevels";
 
@@ -21,7 +23,7 @@ const SkillBreakDown = () => {
   };
 
   return (
-    <Card className="dash-card">
+    <Card className="skill-card">
       <Card.Header>Skills Breakdown By Levels</Card.Header>
       <Card.Body>
         <Row className="d-flex justify-content-center align-items-center">
@@ -32,6 +34,7 @@ const SkillBreakDown = () => {
         {skillNames &&
           skillNames.map((skill) => (
             <SkillsByLevels
+              key={Date.now() * Math.random()}
               name={skill.name}
               maxLevel={skill.maxLevel}
               skillType={skillType.toLowerCase()}

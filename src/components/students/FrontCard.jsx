@@ -1,14 +1,15 @@
 import React from "react";
-import { Card, Row, Button } from "react-bootstrap";
-import ProfilePic from "./ProfilePic";
 import { useHistory } from "react-router-dom";
+import Card from "react-bootstrap/Card";
+import Row from "react-bootstrap/Row";
+import Button from "react-bootstrap/Button";
+import ProfilePic from "./ProfilePic";
 
 const FrontCard = ({ student, handleClick }) => {
   const history = useHistory();
   const redirectOnClick = () => {
-    history.push(`/user-page/${student.email}`);
+    history.push(`/user-page/${student._email}`);
   };
-
   return (
     <Card
       className="dash-card student-card d-flex justify-content-center align-items-center"

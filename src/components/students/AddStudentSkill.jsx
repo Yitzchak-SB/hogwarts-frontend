@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Form, Button, Row } from "react-bootstrap";
+import Row from "react-bootstrap/Row";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 import UserContext from "../../context/UserContext";
 
 function AddStudentSkill(props) {
@@ -33,7 +35,11 @@ function AddStudentSkill(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
     setDone(true);
-    props.submitSkills(skills);
+    const cleanSkills = skills.map((skill) => ({
+      name: skill.name,
+      level: skill.level,
+    }));
+    props.submitSkills(cleanSkills);
   };
 
   const handleEdit = () => {

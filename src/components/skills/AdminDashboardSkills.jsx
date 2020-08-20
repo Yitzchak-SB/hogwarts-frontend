@@ -1,8 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import AddSkill from "./AddSkill";
 import UserContext from "../../context/UserContext";
 import SkillCard from "./SkillCard";
-import { Row, Col } from "react-bootstrap";
 import SkillBreakDown from "./SkillBreakDown";
 
 const AdminDashboardSkills = () => {

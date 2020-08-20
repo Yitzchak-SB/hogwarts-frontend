@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Card, Row, Col, DropdownButton, Dropdown } from "react-bootstrap";
+import Card from "react-bootstrap/Card";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import DropdownButton from "react-bootstrap/DropdownButton";
+import Dropdown from "react-bootstrap/Dropdown";
+import axios from "axios";
 import StudentsTable from "./StudentsTable";
 import SkillsPieChart from "../skills/SkillsPieChart";
-import Axios from "axios";
+
 import AnalyticCard from "./AnalyticCard";
 import Spinner from "../util/Spinner";
 
@@ -11,10 +16,10 @@ function AdminDashboardStudents({ students, setTerm, term }) {
   const [lastCreated, setLastCreated] = useState(null);
 
   useEffect(() => {
-    Axios.get("http://127.0.0.1:5000/updated").then((res) => {
+    axios.get("http://127.0.0.1:5000/updated").then((res) => {
       setLastUpdated(res.data);
     });
-    Axios.get("http://127.0.0.1:5000/created").then((res) => {
+    axios.get("http://127.0.0.1:5000/created").then((res) => {
       setLastCreated(res.data);
     });
   }, [students]);
@@ -32,7 +37,7 @@ function AdminDashboardStudents({ students, setTerm, term }) {
             <Card.Body>
               <DropdownButton
                 value={term}
-                variant="Secondary"
+                variant="danger"
                 className="p-1 m-1"
                 onSelect={handleSortChange}
                 title="Sort By"

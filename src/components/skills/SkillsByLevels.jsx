@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { PieChart } from "react-minimal-pie-chart";
 import { useState } from "react";
-import Axios from "axios";
+import axios from "axios";
 import { COLORS } from "../../data/constants";
 import { Card } from "react-bootstrap";
 
@@ -13,12 +13,12 @@ const SkillsByLevels = ({ name, maxLevel, skillType }) => {
     const urls = Array(parseInt(maxLevel) + 1)
       .fill()
       .map((_, i) =>
-        Axios.get(
+        axios.get(
           `http://127.0.0.1:5000//${skillType}?skill=${name}&level=${i}`
         )
       );
-    Axios.all(urls).then(
-      Axios.spread((...responses) => {
+    axios.all(urls).then(
+      axios.spread((...responses) => {
         const results = responses.map((response) => response.data);
         setSkills(results);
       })
@@ -43,17 +43,17 @@ const SkillsByLevels = ({ name, maxLevel, skillType }) => {
   const pieChartValues = values();
 
   return display ? (
-    <Card className="dash-card">
-      <Card.Header>{name}</Card.Header>
+    <Card className="skill-card">
+      <Card.Header className="text-center">{name}</Card.Header>
       <Card.Body>
         <PieChart
           data={pieChartValues}
           label={(data) =>
             `${data.dataEntry.title} ${((data.dataEntry.value / total) * 100)
               .toString()
-              .slice(0, 5)}%`
+              .slice(0, 3)}%`
           }
-          style={{ fontSize: "2" }}
+          style={{ fontSize: "6" }}
         />
       </Card.Body>
     </Card>

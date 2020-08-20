@@ -1,6 +1,6 @@
 import React from "react";
 import ProfilePic from "./ProfilePic";
-import { Row } from "react-bootstrap";
+import Row from "react-bootstrap/Row";
 
 function AnalyticCard({ data }) {
   return (

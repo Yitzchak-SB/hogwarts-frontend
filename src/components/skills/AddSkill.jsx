@@ -1,6 +1,10 @@
 import React, { useState } from "react";
-import { Row, Col, Card, Form, Button } from "react-bootstrap";
-import Axios from "axios";
+import Card from "react-bootstrap/Card";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import axios from "axios";
 import { withRouter } from "react-router-dom";
 
 const AddSkill = ({ history }) => {
@@ -29,7 +33,8 @@ const AddSkill = ({ history }) => {
         num_of_levels: level,
         skill_description: description,
       };
-      Axios.post("http://127.0.0.1:5000/skills", skillData)
+      axios
+        .post("http://127.0.0.1:5000/skills", skillData)
         .then(history.push("/admin-dashboard"))
         .catch((error) => console.log(error));
     }
@@ -47,7 +52,7 @@ const AddSkill = ({ history }) => {
   return (
     <Row className="d-flex justify-content-center align-items-center">
       <Col sm={{ span: 6 }}>
-        <Card className="dash-card d-flex flex-column justify-content-center align-items-center">
+        <Card className="skill-card d-flex flex-column justify-content-center align-items-center">
           <Card.Header>Add New Skill</Card.Header>
           <Form
             className="d-flex flex-column justify-content-center align-items-center"

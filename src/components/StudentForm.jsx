@@ -1,7 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
-import { withRouter, useHistory, useParams } from "react-router-dom";
-import Axios from "axios";
-import { Card, Row, Col, Button, Form } from "react-bootstrap";
+import { useHistory, useParams } from "react-router-dom";
+import axios from "axios";
+import Card from "react-bootstrap/Card";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 import UserContext from "../context/UserContext";
 import AddStudentSkill from "./students/AddStudentSkill";
 import "../App.css";
@@ -9,7 +13,7 @@ import ProfilePic from "./students/ProfilePic";
 import { PROFILE_URL } from "../data/constants";
 import ErrorModal from "./util/ErrorModel";
 
-function StudentForm({ edit }) {
+function StudentForm({ edit, setKey }) {
   const [student, setStudent] = useState(null);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -23,7 +27,7 @@ function StudentForm({ edit }) {
   const [emailError, setEmailError] = useState(false);
 
   const emailParam = useParams(email);
-
+  let history = useHistory();
   const { user, students, updateStudents } = useContext(UserContext);
 
   const validateInput = (event) => {
@@ -36,7 +40,7 @@ function StudentForm({ edit }) {
       const emailCheck = students.filter(
         (student) => student.email === event.target.value
       );
-      if (emailCheck) return setEmailError(true);
+      if (emailCheck.length > 0) return setEmailError(true);
     }
     setValidated(true);
   };
@@ -62,8 +66,6 @@ function StudentForm({ edit }) {
     }
   }, [emailParam.email, edit, students, user]);
 
-  let history = useHistory();
-
   function handleSubmit(event) {
     event.preventDefault();
     validateInput(event);
@@ -77,19 +79,22 @@ function StudentForm({ edit }) {
         existing_magic_skills: activeSkills,
         desired_magic_skills: desiredSkills,
       };
-      let AxiosUrl = edit
+      let axiosUrl = edit
         ? "http://127.0.0.1:5000/student/edit"
         : "http://127.0.0.1:5000/student";
-      Axios.post(AxiosUrl, {
-        data: {
-          initial_email: student.email,
-          admin: user,
-          student: student,
-        },
-      })
+
+      axios
+        .post(axiosUrl, {
+          data: {
+            initial_email: student.email,
+            admin: user,
+            student: student,
+          },
+        })
         .then(() => {
-          history.push("/admin-dashboard");
           updateStudents();
+          if (edit) history.push("/admin-dashboard");
+          setKey();
         })
         .catch((error) => {
           console.log(error);
@@ -261,4 +266,4 @@ function StudentForm({ edit }) {
   );
 }
 
-export default withRouter(StudentForm);
+export default StudentForm;

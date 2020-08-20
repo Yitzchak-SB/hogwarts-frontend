@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
-import { Spinner, Row } from "react-bootstrap";
+import Row from "react-bootstrap/Row";
 import UserContext from "../../context/UserContext";
-import InfiniteScroll from "react-infinite-scroll-component";
+import InfiniteScroll from "react-infinite-scroller";
 import FlipCard from "./FlipCard";
+import Spinner from "../util/Spinner";
 
 function StudentsTable(props) {
-  const { students, updateStudents } = useContext(UserContext);
+  const { students, updateStudents, studentsCount } = useContext(UserContext);
 
   let studentsArrays = [];
   for (let i = 0; i < students.length; i += 2) {
@@ -14,20 +15,14 @@ function StudentsTable(props) {
   }
 
   return (
-    <>
-      <InfiniteScroll
-        dataLength={students.length} //This is important field to render the next data
-        next={updateStudents}
-        hasMore={true}
-        loader={<Spinner />}
-        endMessage={
-          <p style={{ textAlign: "center" }}>
-            <b>Yay! You have seen it all</b>
-          </p>
-        }
-      ></InfiniteScroll>
+    <InfiniteScroll
+      pageStart={0}
+      loadMore={updateStudents}
+      hasMore={parseInt(studentsCount) > students.length}
+      loader={<Spinner key={Date.now() * Math.random()} />}
+    >
       {studentsArrays.map((array) => (
-        <Row>
+        <Row key={Date.now() * Math.random()}>
           {array.map((student, index) => (
             <FlipCard
               key={Date.now() * Math.random()}
@@ -37,7 +32,7 @@ function StudentsTable(props) {
           ))}
         </Row>
       ))}
-    </>
+    </InfiniteScroll>
   );
 }
 

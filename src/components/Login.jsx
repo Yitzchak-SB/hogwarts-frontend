@@ -1,115 +1,98 @@
-import React from "react";
-import TextField from "@material-ui/core/TextField";
-import { InputAdornment, Button, Grid } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
-import { withRouter } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
-import Axios from "axios";
+import React, { useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import axios from "axios";
 import UserContext from "../context/UserContext";
 
-class Login extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.state = {
-      adminEmail: "",
-      password: "",
-      inputError: false,
-      loginError: false, //{ message: "error" },
-    };
-  }
+import ErrorModal from "./util/ErrorModel";
 
-  handleSubmit(event) {
+const Login = ({ type }) => {
+  const [userEmail, setUserEmail] = useState("");
+  const [userPassword, setUserPassword] = useState("");
+  const [loginError, setLoginError] = useState(false);
+  let history = useHistory();
+  const { setUser } = useContext(UserContext);
+
+  let notValid = userEmail === "" || userPassword === "";
+
+  const handleEmail = (event) => {
+    setUserEmail(event.target.value);
+  };
+
+  const handlePassword = (event) => {
+    setUserPassword(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
     event.preventDefault();
-    if (this.state.adminEmail && this.state.password) {
-      const { adminEmail, password } = this.state;
-      const admin = {
-        email: adminEmail,
-        password: password,
-      };
-      Axios.post("http://127.0.0.1:5000/admin/login", admin)
-        .then((res) => {
-          this.context.setUser(res.data);
-        })
-        .then(() => this.props.history.push("/admin-dashboard"));
-    }
-  }
+    if (loginError) setLoginError(false);
+    const user = {
+      email: userEmail,
+      password: userPassword,
+    };
+    let url = "";
+    if (type === "admin") url = "http://127.0.0.1:5000/admin/login";
+    if (type === "student") url = "http://127.0.0.1:5000/student/login";
+    axios
+      .post(url, user)
+      .then((res) => {
+        setUser(res.data);
+      })
+      .then(() => history.push("/admin-dashboard"))
+      .catch((error) => {
+        console.log(error);
+        setLoginError(true);
+      });
+  };
 
-  render() {
-    const notValid = this.state.adminEmail === "" || this.state.password === "";
-    return (
-      <Grid
-        container
-        direction="column"
-        justify="space-around"
-        alignItems="center"
-      >
-        <h2 className="text-cream">Admin Login</h2>
-        <form>
-          <Grid item>
-            <TextField
-              className="m-3"
+  return (
+    <>
+      <Row>
+        <Col sm={{ span: 3, offset: 4 }}>
+          <Form
+            onSubmit={handleSubmit}
+            className="d-flex flex-column justify-content-center align-items-center"
+          >
+            <Form.Label className="m-2 p-2 text-cream">Email:</Form.Label>
+            <Form.Control
+              className="m-2 p-2"
               required
-              onChange={(event) =>
-                this.setState({ adminEmail: event.target.value })
-              }
-              label="Admin Email"
-              defaultValue={this.state.adminEmail}
-              variant="outlined"
               type="email"
-              error={this.state.inputError}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <FontAwesomeIcon icon={faUser} />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid>
-          <Grid item>
-            <TextField
-              className="m-3"
+              placeholder="you@example.com"
+              onChange={handleEmail}
+              value={userEmail}
+            ></Form.Control>
+            <Form.Label className="m-2 p-2 text-cream">Password:</Form.Label>
+            <Form.Control
+              className="m-2 p-2"
               required
-              onChange={(event) =>
-                this.setState({ password: event.target.value })
-              }
-              label="Password"
-              defaultValue={this.state.password1}
-              variant="outlined"
               type="password"
-              error={this.state.inputError}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <FontAwesomeIcon icon={faLock} />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid>
-          <Grid item>
+              placeholder="********"
+              onChange={handlePassword}
+              value={userPassword}
+            ></Form.Control>
             <Button
-              className="m-3"
+              className="button-color"
               disabled={notValid}
-              onClick={this.handleSubmit}
-              type="submit"
-              variant="outlined"
+              onClick={handleSubmit}
             >
-              Submit
+              Login
             </Button>
-          </Grid>
-        </form>
-        {this.state.loginError && (
-          <Alert variant="outlined" severity="error">
-            <span>{this.state.loginError.message}</span>
-          </Alert>
-        )}
-      </Grid>
-    );
-  }
-}
+          </Form>
+          {loginError && (
+            <ErrorModal
+              title="WE Have a Problem"
+              message="Looks like you did not login."
+              footer="Try again?"
+            />
+          )}
+        </Col>
+      </Row>
+    </>
+  );
+};
 
-export default withRouter(Login);
-Login.contextType = UserContext;
+export default Login;

@@ -1,14 +1,18 @@
 import React, { useState } from "react";
-import { Tabs, Tab } from "react-bootstrap";
+import Tabs from "react-bootstrap/Tabs";
+import Tab from "react-bootstrap/Tab";
 import AdminDashboardStudents from "./students/AdminDashboardStudents";
 import AdminDashboardSkills from "./skills/AdminDashboardSkills";
 import StudentForm from "./StudentForm";
 
 function AdminDashboard({ students, setTerm, term }) {
   const [key, setKey] = useState("students");
+  const resetTab = () => {
+    setKey("students");
+  };
   return (
     <Tabs
-      className="mt-3 admin-tab"
+      className="pl-1 mt-3 admin-tab"
       id="controlled-tab-example"
       activeKey={key}
       onSelect={(k) => setKey(k)}
@@ -24,7 +28,7 @@ function AdminDashboard({ students, setTerm, term }) {
         <AdminDashboardSkills />
       </Tab>
       <Tab eventKey="add_student" title="Add Student">
-        <StudentForm edit={false} />
+        <StudentForm setKey={resetTab} edit={false} />
       </Tab>
     </Tabs>
   );

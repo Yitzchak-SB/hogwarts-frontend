@@ -54,10 +54,21 @@ ul {
   display: block;
 }
 
+.skill-card {
+  box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
+    0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+    0 100px 80px rgba(0, 0, 0, 0.12);
+  margin: 15px 5px;
+  padding: 10px;
+  background: #f8f5c9;
+  border-radius: 5px;
+}
+
 .student-card {
-  width: 300px;
+  width: 330px;
   height: 600px;
-  margin: 40px 0 40px 100px;
+  margin: 40px 0 40px 75px;
 }
 
 .button-color {
@@ -72,7 +83,12 @@ ul {
   border: 1px solid #a63232;
   background-color: #f8f5c9;
 }
-
+.button-color:disabled {
+  border: none;
+  background-color: #d9a78b;
+  border: 1px solid #f8f5c9;
+  color: #f8f5c9;
+}
 .button-color:focus {
   border: none;
   background-color: #a63232;
