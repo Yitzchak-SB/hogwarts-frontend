@@ -7,7 +7,7 @@ import Form from "react-bootstrap/Form";
 import axios from "axios";
 import UserContext from "../context/UserContext";
 import ErrorModal from "./util/ErrorModel";
-import { PROFILE_URL } from "../data/constants";
+import { PROFILE_URL, URL_PREFIX } from "../data/constants";
 
 const SignUp = ({ type }) => {
   const [userFirstName, setUserFirstName] = useState("");
@@ -56,8 +56,8 @@ const SignUp = ({ type }) => {
       image_url: userImageUrl,
     };
     let url = "";
-    if (type === "admin") url = "http://127.0.0.1:5000/admin";
-    if (type === "student") url = "http://127.0.0.1:5000/student";
+    if (type === "admin") url = `${URL_PREFIX}/admin`;
+    if (type === "student") url = `${URL_PREFIX}/student`;
     axios
       .post(url, user)
       .then((res) => {

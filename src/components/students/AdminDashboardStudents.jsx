@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -10,19 +10,30 @@ import SkillsPieChart from "../skills/SkillsPieChart";
 
 import AnalyticCard from "./AnalyticCard";
 import Spinner from "../util/Spinner";
+import UserContext from "../../context/UserContext";
+import { URL_PREFIX } from "../../data/constants";
 
 function AdminDashboardStudents({ students, setTerm, term }) {
   const [lastUpdated, setLastUpdated] = useState(null);
   const [lastCreated, setLastCreated] = useState(null);
+  const { token } = useContext(UserContext);
 
   useEffect(() => {
-    axios.get("http://127.0.0.1:5000/updated").then((res) => {
-      setLastUpdated(res.data);
-    });
-    axios.get("http://127.0.0.1:5000/created").then((res) => {
-      setLastCreated(res.data);
-    });
-  }, [students]);
+    axios
+      .get(`${URL_PREFIX}/updated`, {
+        headers: { Authorization: `JWT ${token}` },
+      })
+      .then((res) => {
+        setLastUpdated(res.data);
+      });
+    axios
+      .get(`${URL_PREFIX}/created`, {
+        headers: { Authorization: `JWT ${token}` },
+      })
+      .then((res) => {
+        setLastCreated(res.data);
+      });
+  }, [students, token]);
 
   const handleSortChange = (event) => {
     setTerm(event);

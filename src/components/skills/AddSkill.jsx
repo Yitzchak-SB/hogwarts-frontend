@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -6,12 +6,15 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
+import UserContext from "../../context/UserContext";
+import { URL_PREFIX } from "../../data/constants";
 
 const AddSkill = ({ history }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [level, setLevel] = useState(0);
   const [validated, setValidated] = useState(false);
+  const { token } = useContext(UserContext);
 
   const handleName = (event) => {
     setName(event.target.value);
@@ -34,7 +37,9 @@ const AddSkill = ({ history }) => {
         skill_description: description,
       };
       axios
-        .post("http://127.0.0.1:5000/skills", skillData)
+        .post(`${URL_PREFIX}/skills`, skillData, {
+          headers: { Authorization: `JWT ${token}` },
+        })
         .then(history.push("/admin-dashboard"))
         .catch((error) => console.log(error));
     }

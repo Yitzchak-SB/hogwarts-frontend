@@ -1,23 +1,28 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { PieChart } from "react-minimal-pie-chart";
 import { useState } from "react";
 import axios from "axios";
 import randomcolor from "randomcolor";
 import { Card } from "react-bootstrap";
+import UserContext from "../../context/UserContext";
 
 const SkillsByLevels = ({ name, maxLevel, skillType }) => {
   const [skills, setSkills] = useState([]);
+  const { token } = useContext(UserContext);
   let display = true;
 
   useEffect(() => {
     axios
       .get(
-        `http://127.0.0.1:5000//${skillType}?skill=${name}&max_level=${maxLevel}`
+        `http://127.0.0.1:5000//${skillType}?skill=${name}&max_level=${maxLevel}`,
+        {
+          headers: { Authorization: `JWT ${token}` },
+        }
       )
       .then((res) => {
         setSkills(res.data[name]);
       });
-  }, [skillType, maxLevel, name]);
+  }, [skillType, maxLevel, name, token]);
 
   let total = 0;
   const values = () => {

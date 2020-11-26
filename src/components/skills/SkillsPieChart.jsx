@@ -10,16 +10,20 @@ function SkillsPieChart({ skillType }) {
   const context = useContext(UserContext);
 
   useEffect(() => {
-    const urls = context.skills.map((skill) =>
-      axios.get(`http://127.0.0.1:5000//${skillType}?skill=${skill.name}`)
-    );
-    axios.all(urls).then(
-      axios.spread((...responses) => {
-        const results = responses.map((response) => response.data);
-        setSkills(results);
-      })
-    );
-  }, [skillType, context.skills]);
+    if (context.skills) {
+      const urls = context.skills.map((skill) =>
+        axios.get(`http://127.0.0.1:5000//${skillType}?skill=${skill.name}`, {
+          headers: { Authorization: `JWT ${context.token}` },
+        })
+      );
+      axios.all(urls).then(
+        axios.spread((...responses) => {
+          const results = responses.map((response) => response.data);
+          setSkills(results);
+        })
+      );
+    }
+  }, [skillType, context]);
   let total = 0;
   const values = () => {
     if (skills) {

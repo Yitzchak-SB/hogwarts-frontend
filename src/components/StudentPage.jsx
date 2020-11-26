@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import ProfilePic from "./students/ProfilePic";
 import axios from "axios";
@@ -6,15 +6,20 @@ import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
 import { formatDistanceToNow } from "date-fns";
 import SkillsProgressBar from "./util/SkillsProgressBar";
+import UserContext from "../context/UserContext";
+import { URL_PREFIX } from "../data/constants";
 
 const StudentPage = () => {
   const { email } = useParams("email");
   const [student, setStudent] = useState(null);
   const [date, setDate] = useState(false);
+  const { token } = useContext(UserContext);
 
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:5000/student/${email}`)
+      .get(`${URL_PREFIX}/student/${email}`, {
+        headers: { Authorization: `JWT ${token}` },
+      })
       .then((res) => {
         setStudent(res.data);
         setDate(
@@ -26,7 +31,7 @@ const StudentPage = () => {
         );
       })
       .catch((error) => console.log(error));
-  }, [email]);
+  }, [email, token]);
 
   return (
     <div className="d-flex justify-content-center align-items-center m-5">

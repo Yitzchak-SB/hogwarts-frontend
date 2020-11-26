@@ -10,7 +10,7 @@ import UserContext from "../context/UserContext";
 import AddStudentSkill from "./students/AddStudentSkill";
 import "../App.css";
 import ProfilePic from "./students/ProfilePic";
-import { PROFILE_URL } from "../data/constants";
+import { PROFILE_URL, URL_PREFIX } from "../data/constants";
 import ErrorModal from "./util/ErrorModel";
 
 function StudentForm({ edit, setKey }) {
@@ -28,7 +28,7 @@ function StudentForm({ edit, setKey }) {
 
   const emailParam = useParams(email);
   let history = useHistory();
-  const { user, students, updateStudents } = useContext(UserContext);
+  const { user, students, updateStudents, token } = useContext(UserContext);
 
   const validateInput = (event) => {
     const form = event.currentTarget;
@@ -80,17 +80,28 @@ function StudentForm({ edit, setKey }) {
         desired_magic_skills: desiredSkills,
       };
       let axiosUrl = edit
-        ? "http://127.0.0.1:5000/student/edit"
-        : "http://127.0.0.1:5000/student";
+        ? `${URL_PREFIX}/student/edit`
+        : `${URL_PREFIX}/student`;
+
+      const headers = {
+        contentType: "application/json",
+        Authorization: `JWT ${token}`,
+      };
 
       axios
-        .post(axiosUrl, {
-          data: {
-            initial_email: student.email,
-            admin: user,
-            student: student,
+        .post(
+          axiosUrl,
+          {
+            data: {
+              initial_email: student.email,
+              admin: user,
+              student: student,
+            },
           },
-        })
+          {
+            headers: headers,
+          }
+        )
         .then(() => {
           updateStudents();
           if (edit) history.push("/admin-dashboard");

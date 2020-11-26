@@ -10,11 +10,13 @@ const SkillBreakDown = () => {
   const [skillType, setSkillType] = useState("Exist");
   const { skills } = useContext(UserContext);
   useEffect(() => {
-    const names = skills.map((skill) => ({
-      name: skill.name,
-      maxLevel: skill.maxLevel,
-    }));
-    setSkillNames(names);
+    if (skills) {
+      const names = skills.map((skill) => ({
+        name: skill.name,
+        maxLevel: skill.maxLevel,
+      }));
+      setSkillNames(names);
+    }
   }, [skills]);
 
   const handleSkillType = () => {

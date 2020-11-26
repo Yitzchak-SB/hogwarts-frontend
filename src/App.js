@@ -10,6 +10,7 @@ import Spinner from "./components/util/Spinner";
 import Landing from "./components/util/Landing";
 import StudentForm from "./components/StudentForm";
 import "./App.css";
+import { URL_PREFIX } from "./data/constants";
 
 const AdminDashboard = React.lazy(() => import("./components/AdminDashboard"));
 const StudentPage = React.lazy(() => import("./components/StudentPage"));
@@ -21,32 +22,41 @@ const App = () => {
   const [term, setTerm] = useState("name_asc");
   const [index, setIndex] = useState(0);
   const [skills, setSkills] = useState(null);
+  const [token, setToken] = useState(null);
 
   const getAllStudents = async () => {
-    const newStudents = students;
-    const StudentsRes = await axios.get(
-      `http://127.0.0.1:5000/students?term=${term}&index=${index}`
-    );
-    const newIndex = index + 5;
-    if (!studentsCount) setStudentsCount(StudentsRes.data.row_count);
-    for (let student in StudentsRes.data.students) {
-      newStudents.push(StudentsRes.data.students[student]);
+    if (token) {
+      console.log(token);
+      const newStudents = students;
+      const studentsRes = await axios.get(
+        `${URL_PREFIX}/students?term=${term}&index=${index}`,
+        {
+          headers: { Authorization: `JWT ${token}` },
+        }
+      );
+      const newIndex = index + 5;
+      if (!studentsCount) setStudentsCount(studentsRes.data.row_count);
+      for (let student in studentsRes.data.students) {
+        newStudents.push(studentsRes.data.students[student]);
+      }
+      setStudents(newStudents);
+      setIndex(newIndex);
+      const skillsRes = await axios.get(`${URL_PREFIX}/skills`, {
+        headers: { Authorization: `JWT ${token}` },
+      });
+      const skillsNames = skillsRes.data.skills.map((skill) => ({
+        name: skill.skill_name.replace("_", " "),
+        level: Math.floor(Math.random() * (skill.num_of_levels + 1)),
+        maxLevel: skill.num_of_levels,
+        description: skill.skill_description,
+      }));
+      setSkills(skillsNames);
     }
-    setStudents(newStudents);
-    setIndex(newIndex);
-    const skillsRes = await axios.get("http://127.0.0.1:5000/skills");
-    const skillsNames = skillsRes.data.skills.map((skill) => ({
-      name: skill.skill_name.replace("_", " "),
-      level: Math.floor(Math.random() * (skill.num_of_levels + 1)),
-      maxLevel: skill.num_of_levels,
-      description: skill.skill_description,
-    }));
-    setSkills(skillsNames);
   };
 
   useEffect(() => {
     getAllStudents();
-  }, []);
+  }, [token]);
 
   const handleTerm = (term) => {
     setTerm(term);
@@ -59,7 +69,9 @@ const App = () => {
     const request = { admin: user, student: student };
     const newStudents = students.filter((user) => student.email !== user.email);
     setStudents(newStudents);
-    await axios.post("http://127.0.0.1:5000/student-del", request);
+    await axios.post(`${URL_PREFIX}/student-del`, request, {
+      headers: `JWT ${token}`,
+    });
     getAllStudents();
   };
 
@@ -79,6 +91,8 @@ const App = () => {
             deleteStudent: deleteStudent,
             updateStudents: getAllStudents,
             skills: skills,
+            token: token,
+            setToken: setToken,
           }}
         >
           <Row>

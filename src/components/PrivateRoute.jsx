@@ -4,9 +4,6 @@ import UserContext from "../context/UserContext";
 
 const PrivateRoute = ({ dashboard, landing }) => {
   const { user } = useContext(UserContext);
-
-  console.log(user);
-
   return (
     <Route
       render={() => {

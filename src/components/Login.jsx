@@ -8,13 +8,14 @@ import axios from "axios";
 import UserContext from "../context/UserContext";
 
 import ErrorModal from "./util/ErrorModel";
+import { URL_PREFIX } from "../data/constants";
 
 const Login = ({ type }) => {
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [loginError, setLoginError] = useState(false);
   let history = useHistory();
-  const { setUser } = useContext(UserContext);
+  const { setUser, setToken } = useContext(UserContext);
 
   let notValid = userEmail === "" || userPassword === "";
 
@@ -30,27 +31,37 @@ const Login = ({ type }) => {
     event.preventDefault();
     if (loginError) setLoginError(false);
     const user = {
-      email: userEmail,
+      username: userEmail,
       password: userPassword,
     };
     let url = "";
-    if (type === "admin") url = "http://127.0.0.1:5000/admin/login";
-    if (type === "student") url = "http://127.0.0.1:5000/student/login";
-    axios
-      .post(url, user)
-      .then((res) => {
-        let userData = res.data;
-        userData.type = type;
-        setUser(userData);
-      })
-      .then(() => {
-        if (type === "admin") history.push("/admin-dashboard");
-        if (type === "student") history.push(`/user-page/${userEmail}`);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoginError(true);
-      });
+
+    axios.post(`${URL_PREFIX}/auth`, user).then((res) => {
+      setToken(res.data.access_token);
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `JWT ${res.data.access_token}`,
+      };
+      if (type === "admin") url = `${URL_PREFIX}/admin/login`;
+      if (type === "student") url = `${URL_PREFIX}/student/login`;
+      axios
+        .post(url, user, {
+          headers: headers,
+        })
+        .then((response) => {
+          let userData = response.data;
+          userData.type = type;
+          setUser(userData);
+        })
+        .then(() => {
+          if (type === "admin") history.push("/admin-dashboard");
+          if (type === "student") history.push(`/user-page/${userEmail}`);
+        })
+        .catch((error) => {
+          console.log(error);
+          setLoginError(true);
+        });
+    });
   };
 
   return (

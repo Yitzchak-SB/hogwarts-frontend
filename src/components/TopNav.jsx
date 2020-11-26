@@ -7,11 +7,11 @@ import format from "date-fns/format";
 import axios from "axios";
 import UserContext from "../context/UserContext";
 import ProfilePic from "./students/ProfilePic";
-import { PROFILE_URL } from "../data/constants";
+import { PROFILE_URL, URL_PREFIX } from "../data/constants";
 import "../App.css";
 
 const TopNav = () => {
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser, token } = useContext(UserContext);
   const [added, setAdded] = useState(null);
   let history = useHistory();
 
@@ -22,11 +22,13 @@ const TopNav = () => {
 
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:5000//student?date=${dateString}`)
+      .get(`${URL_PREFIX}/student?date=${dateString}`, {
+        headers: { Authorization: `JWT ${token}` },
+      })
       .then((res) => {
         setAdded(res.data);
       });
-  }, [user, dateString]);
+  }, [user, dateString, token]);
 
   const handleLogOut = () => {
     setUser(null);
@@ -89,7 +91,7 @@ const TopNav = () => {
               style={{ color: "#f8f5c9" }}
               className="mr-sm-3 ml-sm-3"
             >
-              {added.result} Students Were Added Today
+              {added ? added.result : 0} Students Were Added Today
             </Navbar.Text>
           </Nav>
           <Nav>
